@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-# import django_heroku
 from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -26,7 +25,7 @@ def get_env_value(env_variable):
     try:
       	return os.environ[env_variable]
     except KeyError:
-        error_msg = 'Set the Secret key environment variable'
+        error_msg = 'Set the environment variable'
         raise ImproperlyConfigured(error_msg)
 
 SECRET_KEY = get_env_value('PEPro_SECRET_KEY')
@@ -85,8 +84,12 @@ WSGI_APPLICATION = 'pepro.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': get_env_value('PEPro_DB_NAME'),
+        'USER': get_env_value('PEPro_DB_USER'),
+        'PASSWORD': get_env_value('PEPro_DB_PASSWORD'),
+        'HOST': get_env_value('PEPro_DB_HOST'),
+        'PORT': get_env_value('PEPro_DB_PORT'),
     }
 }
 
@@ -130,4 +133,22 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = "/static/"
 
+if os.getcwd() == '/app':
+    import dj_database_url
+    db_from_env = dj_database_url.config(conn_max_age=500)
+    DATABASES['default'].update(db_from_env)
+    #Honor the 'X-forwarded-Proto' header for request.is_secure().
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+    #Allow all host headers
+    ALLOWED_HOSTS = ['pepro-320.herokuapp.com']
+    DEBUG = True
+
+    #Static asset configuration
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+'''
+Heroku deloyment
+'''
+# import django_heroku
 # django_heroku.settings(locals())
