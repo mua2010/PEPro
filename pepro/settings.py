@@ -21,14 +21,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
-def get_env_value(env_variable):
+def get_env_value(env_variable, which_env_var):
     try:
       	return os.environ[env_variable]
     except KeyError:
-        error_msg = 'Set the environment variable'
+        error_msg = 'Set the environment %s variable' %which_env_var
         raise ImproperlyConfigured(error_msg)
 
-SECRET_KEY = get_env_value('PEPro_SECRET_KEY')
+SECRET_KEY = get_env_value('PEPro_SECRET_KEY', 'SECRET_KEY')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -85,11 +85,11 @@ WSGI_APPLICATION = 'pepro.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': get_env_value('PEPro_DB_NAME'),
-        'USER': get_env_value('PEPro_DB_USER'),
-        'PASSWORD': get_env_value('PEPro_DB_PASSWORD'),
-        'HOST': get_env_value('PEPro_DB_HOST'),
-        'PORT': get_env_value('PEPro_DB_PORT'),
+        'NAME': get_env_value('PEPro_DB_NAME', 'NAME'),
+        'USER': get_env_value('PEPro_DB_USER', 'USER'),
+        'PASSWORD': get_env_value('PEPro_DB_PASSWORD', 'PASSWORD'),
+        'HOST': get_env_value('PEPro_DB_HOST', 'HOST'),
+        'PORT': get_env_value('PEPro_DB_PORT', 'PORT'),
     }
 }
 
