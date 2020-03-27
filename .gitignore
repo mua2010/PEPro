@@ -1,3 +1,6 @@
+# For Josh #
+requirements-local.txt
+
 # Django #
 *.log
 *.pot
