@@ -13,7 +13,7 @@ class Employee(models.Model):
     employee_id = models.IntegerField(default=None, primary_key=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    manager_id = models.IntegerField()
+    manager_id = models.IntegerField(blank=True, null=True)
     company_id = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='company_id2company_id')
 
     def __str__(self):
@@ -24,8 +24,8 @@ class Review(models.Model):
     authored_by = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='authored_by2employee_id')
     recipient = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='recipient2employee_id')
     review_text = models.CharField(max_length=10000)
-    created_at = models.DateTimeField(auto_now=True)
-    requested_at = models.DateTimeField(auto_now_add=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
+    requested_at = models.DateTimeField(auto_now_add=True)
     
     EDITING = 'E'
     SENT = 'S'
