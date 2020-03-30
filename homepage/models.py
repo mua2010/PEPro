@@ -11,8 +11,8 @@ class Company(models.Model):
 
 class Employee(models.Model):
     employee_id = models.IntegerField(default=None, primary_key=True)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
     manager_id = models.IntegerField()
     company_id = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='company_id2company_id')
 
