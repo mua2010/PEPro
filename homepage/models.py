@@ -29,14 +29,16 @@ class Review(models.Model):
     
     EDITING = 'E'
     SENT = 'S'
+    FINISHED = 'F'
     STATUS_CHOICES = (
         (EDITING, 'editing'),
         (SENT, 'sent'),
+        (FINISHED, 'finished')
     )
     status = models.CharField(
         max_length=10,
         choices=STATUS_CHOICES,
-        default=EDITING,
+        default=SENT,
     )
     
     def __str__(self):
