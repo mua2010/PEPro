@@ -24,7 +24,7 @@ class Review(models.Model):
     authored_by = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='authored_by2employee_id')
     recipient = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='recipient2employee_id')
     review_text = models.CharField(max_length=10000)
-    created_at = models.DateTimeField(auto_now_add=True, blank=True)
+    created_at = models.DateTimeField(auto_now=True)
     requested_at = models.DateTimeField(auto_now_add=True, blank=True)
     
     EDITING = 'E'
