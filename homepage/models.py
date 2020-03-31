@@ -8,7 +8,7 @@ class Company(models.Model):
         return self.company_name
 
 class Employee(models.Model):
-    auto_increment_id = models.AutoField(primary_key=True)
+    auto_increment_id = models.AutoField(primary_key=True, default=None)
     employee_id = models.IntegerField()
     first_name = models.CharField(max_length=35)
     last_name = models.CharField(max_length=35)
