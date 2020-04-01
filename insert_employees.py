@@ -24,6 +24,7 @@ def insert_employees(json_file_name):
 
     # Insert Employees into database
     for employee_json in employees_json:
+        email = employee_json["email"]
         employee_id = employee_json["employeeId"]
         first_name = employee_json["firstName"]
         last_name = employee_json["lastName"]
@@ -32,11 +33,12 @@ def insert_employees(json_file_name):
             manager_id = employee_json["managerId"]
         else:
             manager_id = None
-        company_id = employee_json["companyId"]
+        company = employee_json["companyId"]
         Employee.objects.create(
+            email=email,
             employee_id=employee_id,
             first_name=first_name,
             last_name=last_name,
             manager_id=manager_id,
-            company_id=companies_dict[company_id]
+            company=companies_dict[company_id]
         )
