@@ -1,7 +1,3 @@
-{% if confirmation %}
-<b>Review requested</b>
-<br>
-{% endif %}
 <form action="request_review" method="post">
     {% csrf_token %}
     {{ form }}

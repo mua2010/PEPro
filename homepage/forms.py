@@ -39,4 +39,3 @@ class RequestReviewForm(forms.Form):
         reviewer = Employee.objects.get(email=reviewer_email)
 
         return Request.objects.create(request_reviewer=reviewer, request_reviewee=reviewee)
-        
