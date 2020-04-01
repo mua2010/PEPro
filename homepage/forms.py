@@ -1,21 +1,42 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from .models import Employee, Request
 
 class RequestReviewForm(forms.Form):
-    your_first_name = forms.CharField(label="Your First Name", max_length=35)
-    your_last_name = forms.CharField(label="Your Last Name", max_length=35)
-    coworker_first_name = forms.CharField(label="Co-Worker First Name", max_length=35)
-    coworker_last_name = forms.CharField(label="Co-Worker Last Name", max_length=35)
+    reviewee_email = forms.EmailField(label="Your Email", max_length=100)
+    reviewer_email = forms.EmailField(label="Co-Worker's Email", max_length=100)
+
+    def clean(self):
+        reviewee_email = self.cleaned_data["reviewee_email"]
+        reviewer_email = self.cleaned_data["reviewer_email"]
+
+        if not Employee.objects.filter(email=reviewee_email).exists():
+            raise ValidationError("Your email does match any emails on record")
+
+        if not Employee.objects.filter(email=reviewer_email).exists():
+            raise ValidationError("Co-Worker's email does match any emails on record")
+
+        reviewee = Employee.objects.get(email=reviewee_email)
+        reviewer = Employee.objects.get(email=reviewer_email)
+        if Request.objects.filter(request_reviewee=reviewee, request_reviewer=reviewer).exists():
+            raise ValidationError("There is already a pending review request to this person")
+
+        if reviewee_email == reviewer_email:
+            raise ValidationError("You cannot review yourself")
+
+        return self.cleaned_data
+
 
     def insert(self):
-        data = self.cleaned_data
-        author_first_name = data["coworker_first_name"]
-        author_last_name = data["coworker_last_name"]
-        recipient_first_name = data["your_first_name"]
-        recipient_last_name = data["your_last_name"]
-        authored_by = Employee.objects.get(first_name=author_first_name, last_name=author_last_name)
-        recipient = Employee.objects.get(first_name=recipient_first_name, last_name=recipient_last_name)
+        '''
+        Inserts this request object into the request table
+        returns the new request object
+        '''
+        reviewee_email = self.cleaned_data["reviewee_email"]
+        reviewer_email = self.cleaned_data["reviewer_email"]
 
-        Request.objects.create(request_reviewer=authored_by, request_reviewee=recipient)
+        reviewee = Employee.objects.get(email=reviewee_email)
+        reviewer = Employee.objects.get(email=reviewer_email)
 
+        return Request.objects.create(request_reviewer=reviewer, request_reviewee=reviewee)
         

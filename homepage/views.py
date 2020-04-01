@@ -17,6 +17,7 @@ def request_review(request):
             form.insert()
             form = RequestReviewForm()
             render(request, "request_review.html", {"form": form, "confirmation":True})
+            print("Review Requested")
     else:
         form = RequestReviewForm()
     
