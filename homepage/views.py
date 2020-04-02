@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
+from django.core.exceptions import ObjectDoesNotExist
 
 from .forms import RequestReviewForm
-from .models import Review
+from .models import Review, Request, Employee
 
 def index(request):
     template = loader.get_template("index.html")
@@ -12,16 +13,25 @@ def index(request):
 def request_review(request):
     if request.method == "POST":
         form = RequestReviewForm(request.POST)
-
         if form.is_valid():
             form.insert()
             form = RequestReviewForm()
-            render(request, "request_review.html", {"form": form})
-            print("Review Requested")
     else:
         form = RequestReviewForm()
-    
     return render(request, "request_review.html", {"form": form})
+
+def view_requests(request, email):
+    try:
+        reviewer = Employee.objects.get(email=email)
+    except ObjectDoesNotExist:
+        return HttpResponse("Unknown email in url")
+    
+    requests = Request.objects.filter(request_reviewer=reviewer)
+    context = {
+        "empty": len(requests) == 0,
+        "requests": requests
+    }
+    return render(request, "view_requests.html", context)
 
 def give_review(request):
     return HttpResponse("Give review to...")
