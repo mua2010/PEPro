@@ -43,7 +43,7 @@ class Review(models.Model):
     )
     
     def __str__(self):
-        return self.review_text
+        return str(self.reviewer) + "'s review of " + str(self.reviewee) 
 
 class Request(models.Model):
     request_created_at = models.DateTimeField(auto_now_add=True, blank=True)
@@ -51,3 +51,6 @@ class Request(models.Model):
     request_reviewer = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='req_reviewer2id')
     # The employee that requested to have a review written about them
     request_reviewee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='req_reviewee2id')
+
+    def __str__(self):
+        return str(self.request_reviewee) + "'s review request to " + str(self.request_reviewer)
