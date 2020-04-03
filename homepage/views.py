@@ -7,8 +7,12 @@ from .forms import RequestReviewForm
 from .models import Review, Request, Employee
 
 def index(request):
-    template = loader.get_template("index.html")
-    return HttpResponse(template.render({}, request))
+    context = {}
+    curr_user = Employee.objects.get(id=1)
+    context = {'curr_user': curr_user}
+    return render(request, 'index.html', context)
+    # template = loader.get_template("index.html")
+    # return HttpResponse(template.render({}, request))
 
 def request_review(request):
     if request.method == "POST":
