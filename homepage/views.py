@@ -36,6 +36,14 @@ def view_requests(request, email):
 def give_review(request):
     return HttpResponse("Give review to...")
 
+
+def display_requests(request):
+    context = {}
+    requests = Request.objects.order_by('id')
+    context = {'requests': requests}
+    return render(request, 'display_requests.html', context)
+
+# ===========================================================
 # Not sure if this should be a view but it was how I figured out how to run a script
 def insert_employees(request):
     from insert_employees import insert_employees

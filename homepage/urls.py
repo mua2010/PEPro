@@ -23,4 +23,5 @@ urlpatterns = [
     path('view_requests/<str:email>', views.view_requests, name="view_request"),
     path('give_review', views.give_review, name="give_review"),
     path('insert_employees', views.insert_employees, name="insert_employees"),
+    path('display_requests', views.display_requests, name="display_requests"),
 ]

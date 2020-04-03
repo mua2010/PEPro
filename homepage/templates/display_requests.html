@@ -1,0 +1,14 @@
+<head>
+    <meta charset="UTF-8">
+    <title>Requests</title>
+    <h1>REQUESTS</h1>
+</head>
+<ul>
+    {% for request in requests %}   
+        <li> 
+            Request created at: {{ request.request_created_at}}<br />
+            Requested by: {{ request.request_reviewee_id}}<br />
+            To: {{ request.request_reviewer_id}}<br />
+        </li>
+    {% endfor %}
+</ul>
