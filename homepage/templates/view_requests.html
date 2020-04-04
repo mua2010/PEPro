@@ -4,14 +4,21 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script>
             function onClick(request_id, accepted) {
-                console.log("I can't figure out how to handle post request with Django.")
-                $.post("i_dont_know_or_have_a_url",
+                $.post("",
                     {
+                        csrfmiddlewaretoken: "{{ csrf_token }}",
                         request_id: request_id,
                         accepted: accepted
                     },
                     function(data, status) {
-                        document.getElementById(request_id).innerHTML = ""
+                        data = JSON.parse(data);
+                        if (accepted) {
+                            // Redirect to the give review page
+                            window.location.href = "/give_review/" + data["review_id"];
+                        } else {
+                            // Reload the current page with the denied request out of the database
+                            window.location.href = "";
+                        }
                     }
                 );
             }
@@ -23,8 +30,8 @@
             {% for request in requests %}
                 <div id={{request.id}}>
                     {{request.request_reviewee.first_name}} {{request.request_reviewee.last_name}}
-                    <button onClick="onClick(request.id, true);">Accept</button>
-                    <button onClick="onClick(request.id, false);">Deny</button>
+                    <button onClick="onClick({{request.id}}, true);">Accept</button>
+                    <button onClick="onClick({{request.id}}, false);">Deny</button>
                     <br>
                 </div>
             {% endfor %}

@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.template import loader
 from django.core.exceptions import ObjectDoesNotExist
 
-from .forms import RequestReviewForm
+from .forms import RequestReviewForm, GiveReviewForm
 from .models import Review, Request, Employee
 
 def index(request):
@@ -21,6 +21,21 @@ def request_review(request):
     return render(request, "request_review.html", {"form": form})
 
 def view_requests(request, email):
+    if request.method == "POST":
+        request_id = int(request.POST["request_id"])
+        accepted = bool(request.POST["accepted"])
+        review_request = Request.objects.get(id=request_id)
+        review_id_str = ""
+        if accepted:
+            review = Review.objects.create(
+                reviewer=review_request.request_reviewer,
+                reviewee=review_request.request_reviewee,
+            )
+            review_id_str = str(review.id)
+        review_request.delete()
+        # TODO if accepted is false send a message to the requestor saying their request was denied
+        return HttpResponse("{\"review_id\": " + review_id_str + "}")
+
     try:
         reviewer = Employee.objects.get(email=email)
     except ObjectDoesNotExist:
@@ -33,8 +48,13 @@ def view_requests(request, email):
     }
     return render(request, "view_requests.html", context)
 
-def give_review(request):
-    return HttpResponse("Give review to...")
+def give_review(request, review_id):
+    review = Review.objects.get(id=review_id)
+    form = GiveReviewForm(initial={"review_text":review.review_text})
+    context = {
+        "reviewee_name": str(review.reviewee),
+    }
+    return render(request, "give_review.html", context)
 
 
 def display_requests(request):

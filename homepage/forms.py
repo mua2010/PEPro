@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from .models import Employee, Request
+from .models import Employee, Request, Review
 
 class RequestReviewForm(forms.Form):
     reviewee_email = forms.EmailField(label="Your Email", max_length=100)
@@ -16,10 +16,10 @@ class RequestReviewForm(forms.Form):
         if not Employee.objects.filter(email=reviewer_email).exists():
             raise ValidationError("Co-Worker's email does match any emails on record")
 
-        # reviewee = Employee.objects.get(email=reviewee_email)
-        # reviewer = Employee.objects.get(email=reviewer_email)
-        # if Request.objects.filter(request_reviewee=reviewee, request_reviewer=reviewer).exists():
-        #     raise ValidationError("There is already a pending review request to this person")
+        reviewee = Employee.objects.get(email=reviewee_email)
+        reviewer = Employee.objects.get(email=reviewer_email)
+        if Request.objects.filter(request_reviewee=reviewee, request_reviewer=reviewer).exists():
+            raise ValidationError("There is already a pending review request to this person")
 
         if reviewee_email == reviewer_email:
             raise ValidationError("You cannot review yourself")
@@ -38,3 +38,16 @@ class RequestReviewForm(forms.Form):
         reviewer = Employee.objects.get(email=reviewer_email)
 
         Request.objects.create(request_reviewer=reviewer, request_reviewee=reviewee)
+
+class GiveReviewForm(forms.Form):
+    review_text = forms.CharField(label="Review", max_length=10000)
+
+    def save(self, id_):
+        review = Review.objects.get(id=id_)
+        review.review_text = self.review_text
+        review.save()
+    
+    def send(self, id_):
+        review = Review.objects.get(id=id_)
+        review.status = "sent";
+        review.save()
