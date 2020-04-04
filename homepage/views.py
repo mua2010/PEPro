@@ -6,6 +6,8 @@ def index(request):
     template = loader.get_template("index.html")
     return HttpResponse(template.render({}, request))
 
+def welcome_page(request):
+    return HttpResponse("This is the PEPro Main page!Actions below:")
 def request_review(request):
     return HttpResponse("Request review")
 
