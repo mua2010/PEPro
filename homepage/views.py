@@ -2,13 +2,16 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import get_object_or_404
 
 from .forms import RequestReviewForm, GiveReviewForm
 from .models import Review, Request, Employee
 
+
+
 def index(request):
     context = {}
-    curr_user = Employee.objects.get(id=1)
+    curr_user = Employee.objects.get(id=6)
     context = {'curr_user': curr_user}
     return render(request, 'index.html', context)
     # template = loader.get_template("index.html")
@@ -44,8 +47,8 @@ def view_requests(request, email):
         reviewer = Employee.objects.get(email=email)
     except ObjectDoesNotExist:
         return HttpResponse("Unknown email in url")
-    
-    requests = Request.objects.filter(request_reviewer=reviewer)
+    # get_object_or_404
+    requests = Request.objects.filter(requestee_id=reviewer)
     context = {
         "empty": len(requests) == 0,
         "requests": requests
@@ -63,10 +66,28 @@ def give_review(request, review_id):
 
 def display_requests(request):
     context = {}
-    requests = Request.objects.order_by('id')
-    context = {'requests': requests}
-    return render(request, 'display_requests.html', context)
+    # requests = Request.objects.order_by('id')
+    # context = {'requests': requests}
+    # return render(request, 'display_requests.html', context)
+    requests = Request.objects.filter(requestee_id=6)
+    # get_object_or_404(queryset, pk=1)
 
+    context = {
+        "empty": len(requests) == 0,
+        "requests": requests
+    }
+    return render(request, "display_requests.html", context)
+
+def display_requests_helper(id):
+    reviewer = get_object_or_404(Employee, id=id)
+    
+    requests = Request.objects.filter(requestee_id=reviewer)
+    context = {
+        "empty": len(requests) == 0,
+        "requests": requests
+    }
+    # return render(request, "view_requests.html", context)
+    return context
 # ===========================================================
 # Not sure if this should be a view but it was how I figured out how to run a script
 def insert_employees(request):
