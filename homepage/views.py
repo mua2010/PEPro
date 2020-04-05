@@ -49,7 +49,6 @@ def display_requests(request):
     # requests = Request.objects.order_by('id')
     # context = {'requests': requests}
     # return render(request, 'display_requests.html', context)
-
     requests = Request.objects.filter(requestee_id=6)
     # get_object_or_404(queryset, pk=1)
 
@@ -59,6 +58,16 @@ def display_requests(request):
     }
     return render(request, "display_requests.html", context)
 
+def display_requests_helper(id):
+    reviewer = get_object_or_404(Employee, id=id)
+    
+    requests = Request.objects.filter(requestee_id=reviewer)
+    context = {
+        "empty": len(requests) == 0,
+        "requests": requests
+    }
+    # return render(request, "view_requests.html", context)
+    return context
 # ===========================================================
 # Not sure if this should be a view but it was how I figured out how to run a script
 def insert_employees(request):

@@ -34,8 +34,7 @@ class RequestReviewForm(forms.Form):
         reviewee_email = self.cleaned_data["reviewee_email"]
         reviewer_email = self.cleaned_data["reviewer_email"]
 
-        reviewee = Employee.objects.get(email=reviewee_email).id
-        reviewer = Employee.objects.get(email=reviewer_email).id
-        status = "pending"
+        reviewee = Employee.objects.get(email=reviewee_email)
+        reviewer = Employee.objects.get(email=reviewer_email)
 
-        Request.objects.create(status=status, requestee_id=reviewer, requestor_id=reviewee)
+        Request.objects.create(requestee_id=reviewer.id, requestor_id=reviewee.id)
