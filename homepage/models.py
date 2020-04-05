@@ -24,7 +24,7 @@ class Review(models.Model):
     reviewer = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='reviewer2id')
     # The employee that requested to have a review written about them
     reviewee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='reviewee2id')
-    text = models.CharField(max_length=10000, default=None)
+    text = models.CharField(max_length=10000, default=None, blank = True)
     updated_at = models.DateTimeField(auto_now=True, blank=True)
     
     EDITING = 'E'

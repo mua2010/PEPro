@@ -5,28 +5,59 @@
     <-Back to Homepage</a>
       <br>
       <h1>REQUESTS</h1>
-
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script>
+        function update_request(request_id, status) {
+              $.ajax({
+                type: "POST",
+                url: "{% url 'homepage:display_requests_post' %}",
+                contentType: "application/json",
+                data: JSON.stringify({
+                  'request_id' : request_id,
+                  'status':status}),
+                dataType: 'json',
+                beforeSend: function () {
+                },
+                complete: function () {
+                },
+                success: function (response) {
+                  console.log("SUCCESS")
+                  console.log(response.formdata)
+                  var status_id = request_id+"-status"
+                  document.getElementById(status_id).innerText="Deny"
+                  var accept_id = request_id+"-accept"
+                  var deny_id = request_id+"-deny"
+                  document.getElementById(accept_id).style.visibility='hidden'
+                  document.getElementById(deny_id).style.visibility='hidden'
+                },
+                error: function (err) {
+                  console.log(err);
+                }
+              });
+        }
+      </script>
 </head>
-<form id="form" method="POST" >
+<!-- <form id="form" method="POST"> -->
 ​<ul>
   {% for request in requests %}
   <!-- {% if request.requestee_id == 6 %} -->
   <li>
     <!-- <div id={{request.id}}> -->
     <!-- <div class="display_review"> -->
-        {% csrf_token %}
-        Request created at: {{ request.created_at}}<br />
-        Requested by: {{request.requestor_id.first_name}} {{request.requestor_id.last_name}}<br />
-        Status: {{ request.status}}<br />
-        <input type="hidden" name="id" value={{ request.id }}>
-        <input type="hidden" name="requestor_id" value={{ request.requestor_id }}>
-        <input type="hidden" name="requestee_id" value={{ request.requestee_id }}>
-        <input type="submit" value="Accept" name="status">
-        <input type="submit" value="Reject" name="status">
-        <!-- <button onClick="onClick(request.id, true);">Accept</button>
-      <button onClick="onClick(request.id, false);">Deny</button> -->
-        <br>
-        <!-- </div> -->
+      <!-- {% csrf_token %} -->
+    Request created at: {{ request.created_at}}<br />
+    Requested by: {{request.requestor_id.first_name}} {{request.requestor_id.last_name}}<br />
+    Status: <p id="{{request.id}}-status">{{request.status}}</p>
+    <!-- Status: {{ request.status}}<br /> -->
+    <!-- <input type="hidden" name="id" value={{ request.id }}>
+      <input type="hidden" name="requestor_id" value={{ request.requestor_id }}>
+      <input type="hidden" name="requestee_id" value={{ request.requestee_id }}>
+      <input type="submit" value="Accept" name="status">
+      <input type="submit" value="Reject" name="status"> -->
+    <button id="{{request.id}}-accept" value="{{ request.id}}" onclick="update_request(this.value, true)">Accept</button>
+    <button id="{{request.id}}-deny" value="{{ request.id}}" onclick="update_request(this.value, false)">Deny</button>
+    <br>
+    <!-- </div> -->
     <!-- </div> -->
     ​
   </li>
@@ -35,5 +66,5 @@
   {% if empty %}
   No Requests
   {% endif %}
-</form>
+  <!-- </form> -->
 </ul>

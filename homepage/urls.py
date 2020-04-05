@@ -26,5 +26,6 @@ urlpatterns = [
     path('give_review', views.give_review, name="give_review"),
     path('insert_employees', views.insert_employees, name="insert_employees"),
     path('display_requests', views.display_requests, name="display_requests"),
+    path('display_requests_post', views.display_requests_post, name="display_requests_post"),
     # path('acc_dec', views.accept_decline_review_requests, name='acc_dec'),
 ]
