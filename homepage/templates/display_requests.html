@@ -1,26 +1,39 @@
 <head>
-    <meta charset="UTF-8">
-    <title>Requests</title>
-    <h1>REQUESTS</h1>
-    <a href="/"><-Back to Homepage</a>
+  <meta charset="UTF-8">
+  <title>Requests</title>
+  <a href="/">
+    <-Back to Homepage</a>
+      <br>
+      <h1>REQUESTS</h1>
+
 </head>
+<form id="form" method="POST" >
 ​<ul>
   {% for request in requests %}
-        <!-- {% if request.requestee_id == 6 %} -->
-        <li>
-          <div id={{request.id}}>
-            Request created at: {{ request.created_at}}<br />
-            Requested by: {{request.requestor_id.first_name}} {{request.requestor_id.last_name}}<br />
-            Status: {{ request.status}}<br />
-            <button onClick="onClick(request.id, true);">Accept</button>
-            <button onClick="onClick(request.id, false);">Deny</button>
-            <br>
-          </div>
-​
-        </li>
-        <!-- {% endif %} -->
-    {% endfor %}
-    {% if empty %}
-        No Requests
-    {% endif %}
+  <!-- {% if request.requestee_id == 6 %} -->
+  <li>
+    <!-- <div id={{request.id}}> -->
+    <!-- <div class="display_review"> -->
+        {% csrf_token %}
+        Request created at: {{ request.created_at}}<br />
+        Requested by: {{request.requestor_id.first_name}} {{request.requestor_id.last_name}}<br />
+        Status: {{ request.status}}<br />
+        <input type="hidden" name="id" value={{ request.id }}>
+        <input type="hidden" name="requestor_id" value={{ request.requestor_id }}>
+        <input type="hidden" name="requestee_id" value={{ request.requestee_id }}>
+        <input type="submit" value="Accept" name="status">
+        <input type="submit" value="Reject" name="status">
+        <!-- <button onClick="onClick(request.id, true);">Accept</button>
+      <button onClick="onClick(request.id, false);">Deny</button> -->
+        <br>
+        <!-- </div> -->
+    <!-- </div> -->
+    ​
+  </li>
+  <!-- {% endif %} -->
+  {% endfor %}
+  {% if empty %}
+  No Requests
+  {% endif %}
+</form>
 </ul>

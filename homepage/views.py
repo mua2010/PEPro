@@ -68,6 +68,29 @@ def display_requests_helper(id):
     }
     # return render(request, "view_requests.html", context)
     return context
+
+def accept_decline_review_requests(request):
+    breakpoint()
+    if request.method == 'POST':
+        curr_request = Request.objects.get(id=request.POST('id'))
+        requestor_id = request.POST('requestor_id')
+        requestee_id = request.POST('requestee_id')
+
+        # if accepted
+        # create a review obj
+        if request.POST.get('status') == "Accept":
+            curr_request.status = "accepted"
+            curr_request.save()
+            Review.objects.create(reviewer=requestee_id, reviewee=requestor_id)
+
+        # if rejected
+        # set status of request obj to rejected
+        if request.POST.get('status') == "Reject":
+            # curr_request.status = request.POST.get('status')
+            curr_request.status = "rejected"
+            curr_request.save()
+    return render(request, "display_requests.html", {})
+
 # ===========================================================
 # Not sure if this should be a view but it was how I figured out how to run a script
 def insert_employees(request):
