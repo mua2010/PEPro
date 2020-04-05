@@ -5,7 +5,7 @@
 </head>
 ​<ul>
   {% for request in requests %}
-        {% if request.requestee_id == 6 %}
+        <!-- {% if request.requestee_id == 6 %} -->
         <li>
           <div id={{request.id}}>
             Request created at: {{ request.created_at}}<br />
@@ -17,7 +17,7 @@
           </div>
 ​
         </li>
-        {% endif %}
+        <!-- {% endif %} -->
     {% endfor %}
     {% if empty %}
         No Requests
