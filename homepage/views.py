@@ -61,31 +61,17 @@ def display_requests(request):
     return render(request, "display_requests.html", context)
 
 @csrf_exempt
-def display_requests_post(request):
-    # context = {
-    #     "status": "DONE"
-    # }
-    # if request.method == 'POST':
-    #     print("SUCESS FROM VIEWS.py")
-    #     # breakpoint()
-    #     temp = request.body
-    #     print(temp)
-    #     pythonObj = json.loads(temp)
-    #     print(pythonObj)
-        
-    
-    temp = request.body
-    pythonObj = json.loads(temp)
+def display_requests_post(request):    
+    json_data = request.body
+    data_object = json.loads(json_data)
     # breakpoint()
     if request.method == 'POST':
-        status = pythonObj.get('status')
-        curr_id = int(pythonObj.get('request_id'))
+        curr_id = int(data_object.get('request_id'))
         curr_request = Request.objects.get(id=curr_id)
-        # curr_request = Request.objects.get(id=request.POST('id'))
-        requestor_id = curr_request.requestor_id
-        requestor_id = get_object_or_404(Employee,id=requestor_id)
-        requestee_id = curr_request.requestee_id
-        requestee_id = get_object_or_404(Employee,id=requestee_id)
+        status = data_object.get('status')
+
+        requestor_id = get_object_or_404(Employee,id=curr_request.requestor_id)
+        requestee_id = get_object_or_404(Employee,id=curr_request.requestee_id)
         
         # if accepted
         # create a review obj
@@ -97,39 +83,13 @@ def display_requests_post(request):
         # if rejected
         # set status of request obj to rejected
         if status == False:
-            # curr_request.status = request.POST.get('status')
             curr_request.status = "rejected"
             curr_request.save()
 
     return HttpResponse(json.dumps({
         "formdata": "FORM_DATA"}),
     content_type="application/json")
-    # context = {
-        
-    # }
-    # return context
 
-def accept_decline_review_requests(request):
-    # breakpoint()
-    if request.method == 'POST':
-        curr_request = Request.objects.get(id=request.POST('id'))
-        requestor_id = request.POST('requestor_id')
-        requestee_id = request.POST('requestee_id')
-
-        # if accepted
-        # create a review obj
-        if request.POST.get('status') == "Accept":
-            curr_request.status = "accepted"
-            curr_request.save()
-            Review.objects.create(reviewer=requestee_id, reviewee=requestor_id)
-
-        # if rejected
-        # set status of request obj to rejected
-        if request.POST.get('status') == "Reject":
-            # curr_request.status = request.POST.get('status')
-            curr_request.status = "rejected"
-            curr_request.save()
-    # return render(request, "display_requests.html", {})
 
 # ===========================================================
 # Not sure if this should be a view but it was how I figured out how to run a script
