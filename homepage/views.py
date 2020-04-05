@@ -46,18 +46,18 @@ def give_review(request):
 
 def display_requests(request):
     context = {}
-    requests = Request.objects.order_by('id')
-    context = {'requests': requests}
-    return render(request, 'display_requests.html', context)
+    # requests = Request.objects.order_by('id')
+    # context = {'requests': requests}
+    # return render(request, 'display_requests.html', context)
 
-    # requests = Request.objects.filter(requestee_id=6)
+    requests = Request.objects.filter(requestee_id=6)
     # get_object_or_404(queryset, pk=1)
 
-    # context = {
-    #     "empty": len(requests) == 0,
-    #     "requests": requests
-    # }
-    # return render(request, "display_requests.html", context)
+    context = {
+        "empty": len(requests) == 0,
+        "requests": requests
+    }
+    return render(request, "display_requests.html", context)
 
 # ===========================================================
 # Not sure if this should be a view but it was how I figured out how to run a script
