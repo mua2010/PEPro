@@ -18,7 +18,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.index, name="index"),
+    path('', views.homepage, name="homepage"),
     path('request_review', views.request_review, name="request_review"),
     path('view_requests/<str:email>', views.view_requests, name="view_request"),
     path('give_review/<int:review_id>', views.give_review, name="give_review"),

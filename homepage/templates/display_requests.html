@@ -10,8 +10,8 @@
         <li>
           <div id={{request.id}}>
             Request created at: {{ request.created_at}}<br />
-            Requested by: {{request.requestor_id.first_name}} {{request.requestor_id.last_name}}<br />
-            Status: {{ request.status}}<br />
+            Requested by: {{request.requestor_id.first_name}} {{request.requestor_id.last_name}}<br/>
+            Status: {{ request.status}}<br/>
             <button onClick="onClick(request.id, true);">Accept</button>
             <button onClick="onClick(request.id, false);">Deny</button>
             <br>

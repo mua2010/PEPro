@@ -4,10 +4,20 @@ from django.template import loader
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 
-from .forms import RequestReviewForm, GiveReviewForm
+from .forms import RequestReviewForm, GiveReviewForm, NameBox
 from .models import Review, Request, Employee
 
 
+def homepage(request):
+    context = {
+        "name_form": NameBox(),
+        "request_form": RequestReviewForm(),
+        "reviews": Review.objects.filter(),
+        "drafts": Review.objects.filter(),
+        "requests": Request.objects.filter(),
+    }
+    print(context["reviews"])
+    return render(request, "homepage.html", context)
 
 def index(request):
     context = {}
