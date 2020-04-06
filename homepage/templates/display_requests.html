@@ -67,7 +67,7 @@
     Request created at: {{ request.created_at}}<br />
     Requested by: {{request.requestor_id.first_name}} {{request.requestor_id.last_name}}<br />
     Status: <p id="{{request.id}}-status">{{request.status}}</p>
-    <!-- {% if request.status == 'rejected' or request.status == 'accepted'%}
+    <!-- {% if request.status != 'pending'%}
       <script>
         hideButtonsIfAorR("{{request.id}}", true);
       </script>
