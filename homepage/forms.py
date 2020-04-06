@@ -16,10 +16,10 @@ class RequestReviewForm(forms.Form):
         if not Employee.objects.filter(email=reviewer_email).exists():
             raise ValidationError("Co-Worker's email does match any emails on record")
 
-        # reviewee = Employee.objects.get(email=reviewee_email)
-        # reviewer = Employee.objects.get(email=reviewer_email)
-        # if Request.objects.filter(request_reviewee=reviewee, request_reviewer=reviewer).exists():
-        #     raise ValidationError("There is already a pending review request to this person")
+        reviewee = Employee.objects.get(email=reviewee_email)
+        reviewer = Employee.objects.get(email=reviewer_email)
+        if Request.objects.filter(requestor_id=reviewee, requestee_id=reviewer).exists():
+            raise ValidationError("There is already a pending review request to this person")
 
         if reviewee_email == reviewer_email:
             raise ValidationError("You cannot review yourself")

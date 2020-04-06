@@ -6,8 +6,59 @@
       <br>
       <h1>REQUESTS</h1>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-      
-      <script src= "display_requests.js"></script>
+
+      <!-- <script src= "display_requests.js"></script> -->
+      <script>
+        function update_request(request_id, status) {
+          $.ajax({
+            type: "POST",
+            url: "{% url 'homepage:display_requests_post' %}",
+            contentType: "application/json",
+            data: JSON.stringify({
+              'request_id': request_id,
+              'status': status
+            }),
+            dataType: 'json',
+            beforeSend: function () {
+            },
+            complete: function () {
+            },
+            success: function (response) {
+              // console.log(response.formdata)
+
+              // Update Satus output
+              var status_id = request_id + "-status"
+              if (status == true) {
+                document.getElementById(status_id).innerText = "Accepted"
+                // document.getElementById(accept_id).style.visibility = 'hidden'
+              }
+              if (status == false) {
+                document.getElementById(status_id).innerText = "Denied"
+                // document.getElementById(deny_id).style.visibility = 'hidden'
+              }
+
+              // Hide buttons
+              var accept_id = request_id + "-accept"
+              var deny_id = request_id + "-deny"
+              document.getElementById(accept_id).style.visibility = 'hidden'
+              document.getElementById(deny_id).style.visibility = 'hidden'
+            },
+            error: function (err) {
+              console.log(err);
+            }
+          });
+        }
+
+        // function hideButtonsIfAorR(request_id, status) {
+        //   console.log("WORKED")
+        //   if (status == true || status == false){
+        //     var accept_id = request_id + "-accept"
+        //     var deny_id = request_id + "-deny"
+        //     document.getElementById(accept_id).style.visibility = 'hidden'
+        //     document.getElementById(deny_id).style.visibility = 'hidden'
+        //   }
+        // }
+      </script>
 </head>
 
 ​<ul>
@@ -16,7 +67,13 @@
     Request created at: {{ request.created_at}}<br />
     Requested by: {{request.requestor_id.first_name}} {{request.requestor_id.last_name}}<br />
     Status: <p id="{{request.id}}-status">{{request.status}}</p>
-    <button id="{{request.id}}-accept" value="{{ request.id}}" onclick="update_request(this.value, true)">Accept</button>
+    <!-- {% if request.status == 'rejected' or request.status == 'accepted'%}
+      <script>
+        hideButtonsIfAorR("{{request.id}}", true);
+      </script>
+    {% endif %} -->
+    <button id="{{request.id}}-accept" value="{{ request.id}}"
+      onclick="update_request(this.value, true)">Accept</button>
     <button id="{{request.id}}-deny" value="{{ request.id}}" onclick="update_request(this.value, false)">Deny</button>
     <br><br>
     <hr>
