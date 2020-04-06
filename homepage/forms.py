@@ -20,8 +20,6 @@ class RequestReviewForm(forms.Form):
         reviewee_email = self.cleaned_data["reviewee_email"]
         reviewer_email = self.cleaned_data["reviewer_email"]
 
-        print(reviewee_email, reviewer_email)
-
         if not Employee.objects.filter(email=reviewee_email).exists():
             raise ValidationError("Your email does match any emails on record")
 
@@ -61,5 +59,5 @@ class GiveReviewForm(forms.Form):
     
     def send(self, id_):
         review = Review.objects.get(id=id_)
-        review.status = "sent";
+        review.status = "sent"
         review.save()

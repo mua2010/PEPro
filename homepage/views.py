@@ -1,24 +1,87 @@
+import json
+
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.template import RequestContext
 
 from .forms import RequestReviewForm, GiveReviewForm, NameBox
 from .models import Review, Request, Employee
 
 
 def homepage(request):
+    user = Employee.objects.get(id=100)
     context = {
-        "name_form": NameBox(),
+        "user": user,
         "request_form": RequestReviewForm(),
         "reviews": Review.objects.filter(),
         "drafts": Review.objects.filter(),
         "requests": Request.objects.filter(),
     }
-    print(context["reviews"])
     return render(request, "homepage.html", context)
 
+
+def request_review_post(request):
+    reviewee_email = request.POST["reviewee_email"]
+    reviewer_email = request.POST["reviewer_email"]
+
+    if not Employee.objects.filter(email=reviewer_email).exists():
+        return HttpResponse("Co-Worker's email does match any emails on record")
+
+    reviewee = Employee.objects.get(email=reviewee_email)
+    reviewer = Employee.objects.get(email=reviewer_email)
+    if Request.objects.filter(requestor=reviewee, requestee=reviewer).exists():
+        return HttpResponse("There is already a pending review request to this person")
+
+    if reviewee_email == reviewer_email:
+        return HttpResponse("You cannot review yourself")
+
+    reviewee = Employee.objects.get(email=reviewee_email)
+    reviewer = Employee.objects.get(email=reviewer_email)
+
+    Request.objects.create(requestee=reviewer, requestor=reviewee)
+
+    return HttpResponse("Request sent.", status="test")
+
+
+# @csrf_protect
+@csrf_exempt
+def accept_decline_request(request):
+    csrfContext = RequestContext(request)
+    json_data = request.body
+    data_object = json.loads(json_data)
+    if request.method == 'POST':
+        curr_id = int(data_object.get('request_id'))
+        curr_request = Request.objects.get(id=curr_id)
+        status = data_object.get('status')
+
+        requestor_id = get_object_or_404(
+            Employee, id=curr_request.requestor_id)
+        requestee_id = get_object_or_404(
+            Employee, id=curr_request.requestee_id)
+
+        # if accepted, create a review obj
+        if status == True:
+            curr_request.status = "accepted"
+            curr_request.save()
+            Review.objects.create(reviewer=requestee_id, reviewee=requestor_id)
+
+        # if rejected, set status of request obj to rejected
+        if status == False:
+            curr_request.status = "rejected"
+            curr_request.save()
+
+    # sending back temp formdata (remove if works)
+    return HttpResponse(json.dumps({
+        "formdata": "FORM_DATA"
+        }),
+        content_type="application/json")
+
+
+# =========================================
 def index(request):
     context = {}
     curr_user = Employee.objects.get(id=6)
@@ -26,6 +89,7 @@ def index(request):
     return render(request, 'index.html', context)
     # template = loader.get_template("index.html")
     # return HttpResponse(template.render({}, request))
+
 
 def request_review(request):
     if request.method == "POST":
@@ -36,6 +100,7 @@ def request_review(request):
     else:
         form = RequestReviewForm()
     return render(request, "request_review.html", {"form": form})
+
 
 def view_requests(request, email):
     if request.method == "POST":
@@ -65,9 +130,10 @@ def view_requests(request, email):
     }
     return render(request, "view_requests.html", context)
 
+
 def give_review(request, review_id):
     review = Review.objects.get(id=review_id)
-    form = GiveReviewForm(initial={"review_text":review.review_text})
+    form = GiveReviewForm(initial={"review_text": review.review_text})
     context = {
         "reviewee_name": str(review.reviewee),
     }
@@ -88,9 +154,10 @@ def display_requests(request):
     }
     return render(request, "display_requests.html", context)
 
+
 def display_requests_helper(id):
     reviewer = get_object_or_404(Employee, id=id)
-    
+
     requests = Request.objects.filter(requestee_id=reviewer)
     context = {
         "empty": len(requests) == 0,
@@ -100,6 +167,8 @@ def display_requests_helper(id):
     return context
 # ===========================================================
 # Not sure if this should be a view but it was how I figured out how to run a script
+
+
 def insert_employees(request):
     from insert_employees import insert_employees
     insert_employees(json_file_name="employees.json")

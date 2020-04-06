@@ -17,8 +17,13 @@ from django.contrib import admin
 from django.urls import path
 from . import views
 
+app_name = 'homepage'
+
 urlpatterns = [
     path('', views.homepage, name="homepage"),
+    path('accept_decline_request', views.accept_decline_request, name="accept_decline_request"),
+    path('request_review_post', views.request_review_post, name="request_review_post"),
+
     path('request_review', views.request_review, name="request_review"),
     path('view_requests/<str:email>', views.view_requests, name="view_request"),
     path('give_review/<int:review_id>', views.give_review, name="give_review"),
