@@ -6,7 +6,6 @@ from django.template import loader
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
-from django.template import RequestContext
 
 from .forms import RequestReviewForm, GiveReviewForm, NameBox
 from .models import Review, Request, Employee
@@ -16,10 +15,9 @@ def homepage(request):
     user = Employee.objects.get(id=100)
     context = {
         "user": user,
-        "request_form": RequestReviewForm(),
-        "reviews": Review.objects.filter(),
-        "drafts": Review.objects.filter(),
-        "requests": Request.objects.filter(),
+        "reviews": Review.objects.filter(reviewee=user, status=Review.SENT),
+        "drafts": Review.objects.filter(reviewer=user, status=Review.EDITING),
+        "requests": Request.objects.filter(requestee=user, status=Request.PENDING)
     }
     return render(request, "homepage.html", context)
 
@@ -47,10 +45,32 @@ def request_review_post(request):
     return HttpResponse("Request sent.", status="test")
 
 
-# @csrf_protect
-@csrf_exempt
+'''
+{
+    csrfmiddlewaretoken: "{{ csrf_token }}",
+    review_id: review_id,
+    status: status,
+    draft_text: draft_text
+},
+'''
 def accept_decline_request(request):
-    csrfContext = RequestContext(request)
+    data = request.POST
+    review = Review.objects.get(id=data["review_id"])
+    status = data["status"]
+    review.status = status
+    review.text = data["draft_text"]
+    review.save()
+     
+    # if accepted, create a review obj
+    if status == "A":
+        curr_request.status = "A"
+        curr_request.save()
+        Review.objects.create(reviewer=requestee_id, reviewee=requestor_id)
+        return HttpResponse("Request Accepted")
+    elif status == "D":
+        return HttpResponse("Request Rejected")
+
+
     json_data = request.body
     data_object = json.loads(json_data)
     if request.method == 'POST':
@@ -65,13 +85,13 @@ def accept_decline_request(request):
 
         # if accepted, create a review obj
         if status == True:
-            curr_request.status = "accepted"
+            curr_request.status = "A"
             curr_request.save()
             Review.objects.create(reviewer=requestee_id, reviewee=requestor_id)
 
         # if rejected, set status of request obj to rejected
         if status == False:
-            curr_request.status = "rejected"
+            curr_request.status = "R"
             curr_request.save()
 
     # sending back temp formdata (remove if works)
@@ -80,6 +100,19 @@ def accept_decline_request(request):
         }),
         content_type="application/json")
 
+
+def submit_draft_post(request):
+    data = request.POST
+    review = Review.objects.get(id=data["review_id"])
+    status = data["status"]
+    review.status = status
+    review.text = data["draft_text"]
+    review.save()
+
+    if status == "S":
+        return HttpResponse("Review sent")
+    elif status == "E":
+        return HttpResponse("Draft Saved")
 
 # =========================================
 def index(request):
