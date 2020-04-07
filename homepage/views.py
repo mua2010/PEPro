@@ -54,22 +54,31 @@ def request_review_post(request):
 '''
 def accept_deny_request(request):
     data = request.POST
-    curr_request = Request.objects.get(id=data["request_id"])
-    status = data["status"]
-    curr_request.status = status
-    curr_request.save()
     
-    requestor_id = get_object_or_404(
-        Employee, id=curr_request.requestor_id)
-    requestee_id = get_object_or_404(
-        Employee, id=curr_request.requestee_id)
+    if Request.objects.filter(id=data["request_id"], status=Request.PENDING).exists():
+        curr_request = Request.objects.get(id=data["request_id"], status=Request.PENDING)
+        status = data["status"]
+        curr_request.status = status
+        curr_request.save()
+        
+        requestor_id = get_object_or_404(
+            Employee, id=curr_request.requestor_id)
+        requestee_id = get_object_or_404(
+            Employee, id=curr_request.requestee_id)
 
+    response_data = {
+        "feedback": None,
+        "id": None
+    }
     if status == "A":
-        Review.objects.create(reviewer=requestee_id, reviewee=requestor_id)
-        return HttpResponse("Request Accepted")
+        review = Review.objects.create(reviewer=requestee_id, reviewee=requestor_id)
+        response_data["feedback"] = "Request Accepted"
+        response_data["id"] = review.id
+        response_data["reviewee"] = str(review.reviewee)
+        return HttpResponse(json.dumps(response_data))
     elif status == "D":
-        return HttpResponse("Request Rejected")
-
+        response_data["feedback"] = "Request Rejected"
+        return HttpResponse(json.dumps(response_data))
 
 def submit_draft_post(request):
     data = request.POST

@@ -17,7 +17,6 @@
           reviewer_email: reviewer_email
         },
         function (data, status) {
-          console.log(status);
           const feedback_element = document.getElementById("new_request_feedback");
           const draft_textarea = document.getElementById("")
           feedback_element.innerHTML = data;
@@ -70,14 +69,37 @@
           request_id: request_id,
           status: status,
         },
-        function (data, status) {
+        function (data, stat) {
+          data = JSON.parse(data);
+          feedback = data["feedback"]
           var accept_id = request_id + "-accept"
           var deny_id = request_id + "-deny"
           document.getElementById(accept_id).hidden = true;
           document.getElementById(deny_id).hidden = true;
 
           const request_feedback = document.getElementById("request" + request_id + "_feedback");
-          request_feedback.innerHTML = data
+          if (status === "A") {
+            draft_id = data["id"]
+            draft_reviewee = data["reviewee"]
+
+            request_feedback.innerHTML = 
+            data["feedback"] + '\
+            <div class="subcontent" id=' + draft_id + '>\
+              <div class="draft_head">\
+                Your draft to ' + draft_reviewee + ':\
+              </div>\
+              <textarea id="draft_text" placeholder="write review..."></textarea>\
+              <br>\
+              <button onClick="submitDraft(' + draft_id + ', "E");">Save Draft</button>\
+              <button onClick="submitDraft(' + draft_id + ', "S");">Send Review</button>\
+            </div>\
+            <div class="subcontent" id="draft' + draft_id + '_feedback" hidden></div>\
+            <hr>';
+
+          } else if (status === "D") {
+            request_feedback.innerHTML = data["feedback"]
+          }
+          
           request_feedback.hidden = false;
         }
       );
