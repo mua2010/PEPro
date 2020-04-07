@@ -64,12 +64,11 @@
     }
 
     function requestClick(request_id, status) {
-      $.post("submit_draft_post",
+      $.post("accept_deny_request",
         {
           csrfmiddlewaretoken: "{{ csrf_token }}",
-          review_id: review_id,
+          request_id: request_id,
           status: status,
-          draft_text: draft_text
         },
         function (data, status) {
           var accept_id = request_id + "-accept"
@@ -77,7 +76,7 @@
           document.getElementById(accept_id).hidden = true;
           document.getElementById(deny_id).hidden = true;
 
-          const request_feedback = document.getElementById("request" + review_id + "_feedback");
+          const request_feedback = document.getElementById("request" + request_id + "_feedback");
           request_feedback.innerHTML = data
           request_feedback.hidden = false;
         }

@@ -48,57 +48,27 @@ def request_review_post(request):
 '''
 {
     csrfmiddlewaretoken: "{{ csrf_token }}",
-    review_id: review_id,
+    request_id: request_id,
     status: status,
-    draft_text: draft_text
-},
+}
 '''
-def accept_decline_request(request):
+def accept_deny_request(request):
     data = request.POST
-    review = Review.objects.get(id=data["review_id"])
+    curr_request = Request.objects.get(id=data["request_id"])
     status = data["status"]
-    review.status = status
-    review.text = data["draft_text"]
-    review.save()
-     
-    # if accepted, create a review obj
+    curr_request.status = status
+    curr_request.save()
+    
+    requestor_id = get_object_or_404(
+        Employee, id=curr_request.requestor_id)
+    requestee_id = get_object_or_404(
+        Employee, id=curr_request.requestee_id)
+
     if status == "A":
-        curr_request.status = "A"
-        curr_request.save()
         Review.objects.create(reviewer=requestee_id, reviewee=requestor_id)
         return HttpResponse("Request Accepted")
     elif status == "D":
         return HttpResponse("Request Rejected")
-
-
-    json_data = request.body
-    data_object = json.loads(json_data)
-    if request.method == 'POST':
-        curr_id = int(data_object.get('request_id'))
-        curr_request = Request.objects.get(id=curr_id)
-        status = data_object.get('status')
-
-        requestor_id = get_object_or_404(
-            Employee, id=curr_request.requestor_id)
-        requestee_id = get_object_or_404(
-            Employee, id=curr_request.requestee_id)
-
-        # if accepted, create a review obj
-        if status == True:
-            curr_request.status = "A"
-            curr_request.save()
-            Review.objects.create(reviewer=requestee_id, reviewee=requestor_id)
-
-        # if rejected, set status of request obj to rejected
-        if status == False:
-            curr_request.status = "R"
-            curr_request.save()
-
-    # sending back temp formdata (remove if works)
-    return HttpResponse(json.dumps({
-        "formdata": "FORM_DATA"
-        }),
-        content_type="application/json")
 
 
 def submit_draft_post(request):
