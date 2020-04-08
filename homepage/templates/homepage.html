@@ -1,0 +1,266 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>PEPro</title>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script>
+
+    function submitRequest(reviewee_email) {
+      const reviewer_email = document.getElementById("coworker_email_input").value;
+      $.post("request_review_post",
+        {
+          csrfmiddlewaretoken: "{{ csrf_token }}",
+          reviewee_email: reviewee_email,
+          reviewer_email: reviewer_email
+        },
+        function (data, status) {
+          const feedback_element = document.getElementById("new_request_feedback");
+          const draft_textarea = document.getElementById("")
+          feedback_element.innerHTML = data;
+          feedback_element.hidden = false;
+        }
+      );
+    }
+
+    function submitDraft(review_id, status) {
+      const draft_text = document.getElementById("draft_text").value;
+      $.post("submit_draft_post",
+        {
+          csrfmiddlewaretoken: "{{ csrf_token }}",
+          review_id: review_id,
+          status: status,
+          draft_text: draft_text
+        },
+        function (data, stat) {
+          if (status === "S") {
+            document.getElementById("draft" + review_id).hidden = true;
+          }
+
+          const draft_feedback = document.getElementById("draft" + review_id + "_feedback");
+          draft_feedback.innerHTML = data
+          draft_feedback.hidden = false;
+        }
+      );
+    }
+
+    function navClick(isReviews) {
+      // Called when the 'Reviews' and 'Requests' buttons are pressed
+      // Toggles which view is being shown
+      if (isReviews) {
+        document.getElementById("reviews").hidden = false;
+        document.getElementById("requests").hidden = true;
+        document.getElementById("review_button").disabled = true;
+        document.getElementById("request_button").disabled = false;
+      } else {
+        document.getElementById("reviews").hidden = true;
+        document.getElementById("requests").hidden = false;
+        document.getElementById("review_button").disabled = false;
+        document.getElementById("request_button").disabled = true;
+      }
+    }
+
+    function requestClick(request_id, status) {
+      $.post("accept_deny_request",
+        {
+          csrfmiddlewaretoken: "{{ csrf_token }}",
+          request_id: request_id,
+          status: status,
+        },
+        function (data, stat) {
+          data = JSON.parse(data);
+          feedback = data["feedback"]
+          var accept_id = request_id + "-accept"
+          var deny_id = request_id + "-deny"
+          document.getElementById(accept_id).hidden = true;
+          document.getElementById(deny_id).hidden = true;
+
+          const request_feedback = document.getElementById("request" + request_id + "_feedback");
+          if (status === "A") {
+            draft_id = data["id"]
+            draft_reviewee = data["reviewee"]
+
+            request_feedback.innerHTML = 
+            data["feedback"] + '\
+            <div class="subcontent" id=' + draft_id + '>\
+              <div class="draft_head">\
+                Your draft to ' + draft_reviewee + ':\
+              </div>\
+              <textarea id="draft_text" placeholder="write review..."></textarea>\
+              <br>\
+              <button onClick="submitDraft(' + draft_id + ', "E");">Save Draft</button>\
+              <button onClick="submitDraft(' + draft_id + ', "S");">Send Review</button>\
+            </div>\
+            <div class="subcontent" id="draft' + draft_id + '_feedback" hidden></div>\
+            <hr>';
+
+          } else if (status === "D") {
+            request_feedback.innerHTML = data["feedback"]
+          }
+          
+          request_feedback.hidden = false;
+        }
+      );
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: Arial;
+    }
+
+    #page {
+      width: 70%;
+      height: 100%;
+      margin: auto;
+      border-style: solid;
+    }
+
+    #banner {
+      font-size: 20px;
+      margin-top: 35px;
+      margin-bottom: 25px;
+      margin-left: 25px;
+      margin-right: 25px;
+      border-style: solid;
+    }
+
+    #greeting {
+      margin-top: 10px;
+      margin-left: 10px;
+    }
+
+    #nav_buttons {
+      text-align: right;
+      margin-bottom: 10px;
+      margin-right: 10px;
+    }
+
+    .nav_button {
+      font-size: 20px;
+      margin-top: 25px;
+    }
+
+    #content {
+      font-size: 20px;
+      margin-top: 25px;
+      margin-bottom: 25px;
+      margin-left: 25px;
+      margin-right: 25px;
+      border-style: solid;
+    }
+
+    .subcontent {
+      margin-bottom: 10px;
+      margin-right: 10px;
+      margin-left: 10px;
+      margin-top: 10px;
+    }
+
+    .review_text {
+      margin-top: 5px;
+      font-size: 15px;
+    }
+
+    .draft_text {
+      margin-top: 5px;
+      font-size: 15px;
+    }
+
+    #new_request {
+      margin-right: 25px;
+      text-align: right;
+    }
+
+    #new_request_button {
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+
+    #coworker_email_input {
+      margin-bottom: 5px;
+    }
+
+    #draft_text {
+      width: 100%;
+      min-height: 75px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="page">
+
+    <div id="banner">
+      <div id="greeting">
+        Hello, {{user}}
+      </div>
+
+      <div id="new_request">
+        <button id="new_request_button" onClick="document.getElementById('new_request_input').hidden = false;">Request
+          Review</button>
+        <div id="new_request_input" hidden>
+          <div id="new_request_feedback" hidden></div>
+          Co-worker Email: <input id="coworker_email_input" type="text" maxlength="70">
+          <br>
+          <button onClick="document.getElementById('new_request_input').hidden = true;">Cancel</button>
+          <button onClick="submitRequest('{{user.email}}')">Submit Request</button>
+        </div>
+      </div>
+
+      <div id="nav_buttons">
+        <button class="nav_button" id="review_button" onClick="navClick(true);" disabled="true">Reviews</button>
+        <button class="nav_button" id="request_button" onClick="navClick(false);">Requests</button>
+      </div>
+    </div>
+
+    <div id="content">
+      <div id="reviews">
+        {% for review in reviews %}
+        <div class="subcontent" id="review{{review.id}}">
+          <div class="review_head">
+            From {{review.reviewer}}
+          </div>
+          <div class="review_text">
+            {{review.text}}
+          </div>
+        </div>
+        <hr>
+        {% endfor %}
+      </div>
+
+      <div id="requests" hidden>
+        {% for draft in drafts %}
+        <div class="subcontent" id="draft{{draft.id}}">
+          <div class="draft_head">
+            Your draft to {{draft.reviewee}}:
+          </div>
+          <textarea id="draft_text">{{draft.text}}</textarea>
+          <br>
+          <button onClick="submitDraft({{draft.id}}, 'E');">Save Draft</button>
+          <button onClick="submitDraft({{draft.id}}, 'S');">Send Review</button>
+        </div>
+        <div class="subcontent" id="draft{{draft.id}}_feedback" hidden></div>
+        <hr>
+        {% endfor %}
+
+        {% for request in requests %}
+        <div class="subcontent" id="request{{request.id}}">
+          <div class="request_head">
+            Request From {{request.requestor}}
+            <button id="{{request.id}}-accept" onClick="requestClick({{request.id}}, 'A');">✓</button>
+            <button id="{{request.id}}-deny" onClick="requestClick({{request.id}}, 'D');">x</button>
+            <br>
+          </div>
+        </div>
+        <div class="subcontent" id="request{{request.id}}_feedback" hidden></div>
+        <hr>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
