@@ -26,6 +26,7 @@
     }
 
     function submitDraft(review_id, status) {
+      console.log("submitDraft");
       const draft_text = document.getElementById("draft_text").value;
       $.post("submit_draft_post",
         {
@@ -84,17 +85,16 @@
 
             request_feedback.innerHTML = 
             data["feedback"] + '\
-            <div class="subcontent" id=' + draft_id + '>\
+            <div class="subcontent" id="draft' + draft_id + '"">\
               <div class="draft_head">\
                 Your draft to ' + draft_reviewee + ':\
               </div>\
               <textarea id="draft_text" placeholder="write review..."></textarea>\
               <br>\
-              <button onClick="submitDraft(' + draft_id + ', "E");">Save Draft</button>\
-              <button onClick="submitDraft(' + draft_id + ', "S");">Send Review</button>\
+              <button onClick="submitDraft(' + draft_id + ', \'E\');">Save Draft</button>\
+              <button onClick="submitDraft(' + draft_id + ', \'S\');">Send Review</button>\
             </div>\
-            <div class="subcontent" id="draft' + draft_id + '_feedback" hidden></div>\
-            <hr>';
+            <div class="subcontent" id="draft' + draft_id + '_feedback" hidden></div>';
 
           } else if (status === "D") {
             request_feedback.innerHTML = data["feedback"]
