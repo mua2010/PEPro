@@ -1,0 +1,32 @@
+{% extends 'homepage/homepage.html' %}
+<!--  -->
+{% block content %}
+
+<div id="requests">
+    {% for draft in drafts %}
+    <div class="subcontent" id="draft{{draft.id}}">
+        <div class="draft_head">
+            Your draft to {{draft.reviewee}}:
+        </div>
+        <textarea id="draft_text">{{draft.text}}</textarea>
+        <br>
+        <button onClick="submitDraft({{draft.id}}, 'E');">Save Draft</button>
+        <button onClick="submitDraft({{draft.id}}, 'S');">Send Review</button>
+    </div>
+    <div class="subcontent" id="draft{{draft.id}}_feedback" hidden></div>
+    <hr> {% endfor %}
+    <!--  -->
+    {% for request in requests %}
+    <div class="subcontent" id="request{{request.id}}">
+        <div class="request_head">
+            Request From {{request.requestor}}
+            <button id="{{request.id}}-accept" onClick="requestClick({{request.id}}, 'A');">✓</button>
+            <button id="{{request.id}}-deny" onClick="requestClick({{request.id}}, 'D');">x</button>
+            <br>
+        </div>
+    </div>
+    <div class="subcontent" id="request{{request.id}}_feedback" hidden></div>
+    <hr> {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="utf-8">
+
+    <title>PEPro</title>
+
+    <link rel="stylesheet" href="{% static 'homepage/css/homepage.css' %}">
+
+</head>
+
+<body>
+    <a href="index">to index</a>
+    <div id="page">
+        <div id="banner">
+            <div id="greeting">
+                Hello, {{user}}
+            </div>
+
+            <div id="new_request">
+                <button id="new_request_button" onClick="document.getElementById('new_request_input').hidden = false;">Request
+          Review</button>
+                <div id="new_request_input" hidden>
+                    <div id="new_request_feedback" hidden></div>
+                    Co-worker Email: <input id="coworker_email_input" type="text" maxlength="70">
+                    <br>
+                    <button onClick="document.getElementById('new_request_input').hidden = true;">Cancel</button>
+                    <button onClick="submitRequest('{{user.email}}')">Submit Request</button>
+                </div>
+            </div>
+
+            <div id="nav_buttons">
+                <button class="nav_button" id="review_button" onClick="navClick(true);" disabled="true">Reviews</button>
+                <button class="nav_button" id="request_button" onClick="navClick(false);">Requests</button>
+            </div>
+        </div>
+
+        <div id="content">
+            <div id="reviews">
+                {% for review in reviews %}
+                <div class="subcontent" id="review{{review.id}}">
+                    <div class="review_head">
+                        From {{review.reviewer}}
+                    </div>
+                    <div class="review_text">
+                        {{review.text}}
+                    </div>
+                </div>
+                <hr> {% endfor %}
+            </div>
+
+            <div id="requests" hidden>
+                {% for draft in drafts %}
+                <div class="subcontent" id="draft{{draft.id}}">
+                    <div class="draft_head">
+                        Your draft to {{draft.reviewee}}:
+                    </div>
+                    <textarea id="draft_text">{{draft.text}}</textarea>
+                    <br>
+                    <button onClick="submitDraft({{draft.id}}, 'E');">Save Draft</button>
+                    <button onClick="submitDraft({{draft.id}}, 'S');">Send Review</button>
+                </div>
+                <div class="subcontent" id="draft{{draft.id}}_feedback" hidden></div>
+                <hr> {% endfor %} {% for request in requests %}
+                <div class="subcontent" id="request{{request.id}}">
+                    <div class="request_head">
+                        Request From {{request.requestor}}
+                        <button id="{{request.id}}-accept" onClick="requestClick({{request.id}}, 'A');">✓</button>
+                        <button id="{{request.id}}-deny" onClick="requestClick({{request.id}}, 'D');">x</button>
+                        <br>
+                    </div>
+                </div>
+                <div class="subcontent" id="request{{request.id}}_feedback" hidden></div>
+                <hr> {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- <script src="{% static 'homepage/js/jquery-3.3.1.min.js' %}"></script> -->
+    <script src="{% static 'homepage/js/homepage.js' %}"></script>
+</body>
+
+</html>

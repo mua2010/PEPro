@@ -1,0 +1,13 @@
+{% extends 'homepage/homepage.html' %}
+<!--  -->
+{% block content %}
+
+<div id="new_request_input">
+    Co-worker Email: <input id="coworker_email_input" type="text" maxlength="70">
+    <br>
+    <div id="new_request_feedback" hidden></div>
+    <br>
+    <button class="btn btn-dark" onClick="submitRequest('{{user.email}}')">Submit Request</button>
+</div>
+
+{% endblock %}

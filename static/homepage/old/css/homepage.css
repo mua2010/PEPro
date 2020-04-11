@@ -1,0 +1,80 @@
+body {
+    font-family: Arial;
+}
+
+#page {
+    width: 70%;
+    height: 100%;
+    margin: auto;
+    border-style: solid;
+}
+
+#banner {
+    font-size: 20px;
+    margin-top: 35px;
+    margin-bottom: 25px;
+    margin-left: 25px;
+    margin-right: 25px;
+    border-style: solid;
+}
+
+#greeting {
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+#nav_buttons {
+    text-align: right;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
+.nav_button {
+    font-size: 20px;
+    margin-top: 25px;
+}
+
+#content {
+    font-size: 20px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-left: 25px;
+    margin-right: 25px;
+    border-style: solid;
+}
+
+.subcontent {
+    margin-bottom: 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.review_text {
+    margin-top: 5px;
+    font-size: 15px;
+}
+
+.draft_text {
+    margin-top: 5px;
+    font-size: 15px;
+}
+
+#new_request {
+    margin-right: 25px;
+    text-align: right;
+}
+
+#new_request_button {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+#coworker_email_input {
+    margin-bottom: 5px;
+}
+
+#draft_text {
+    width: 100%;
+    min-height: 75px;
+}
