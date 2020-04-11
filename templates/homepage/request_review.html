@@ -2,12 +2,15 @@
 <!--  -->
 {% block content %}
 
-<div id="new_request_input">
+<div class="form-check" id="new_request_input">
     Co-worker Email: <input id="coworker_email_input" type="text" maxlength="70">
     <br>
-    <div id="new_request_feedback" hidden></div>
     <br>
+    <div class="alert alert-danger" role="alert" id="new_request_feedback" hidden></div>
     <button class="btn btn-dark" onClick="submitRequest('{{user.email}}')">Submit Request</button>
+    <br>
+    <br>
 </div>
+
 
 {% endblock %}

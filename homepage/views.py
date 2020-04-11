@@ -103,15 +103,15 @@ def request_review_post(request):
     reviewer_email = request.POST["reviewer_email"]
 
     if not Employee.objects.filter(email=reviewer_email).exists():
-        return HttpResponse("Co-Worker's email does match any emails on record")
+        return HttpResponse("Co-worker's email does not match any emails on record!")
 
     reviewee = Employee.objects.get(email=reviewee_email)
     reviewer = Employee.objects.get(email=reviewer_email)
     if Request.objects.filter(requestor=reviewee, requestee=reviewer).exists():
-        return HttpResponse("There is already a pending review request to this person")
+        return HttpResponse("There is already a pending review request to this person!")
 
     if reviewee_email == reviewer_email:
-        return HttpResponse("You cannot review yourself")
+        return HttpResponse("You cannot review yourself!")
 
     reviewee = Employee.objects.get(email=reviewee_email)
     reviewer = Employee.objects.get(email=reviewer_email)

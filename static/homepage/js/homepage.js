@@ -8,7 +8,8 @@ function submitRequest(reviewee_email) {
         function(data, status) {
             const feedback_element = document.getElementById("new_request_feedback");
             const draft_textarea = document.getElementById("")
-            feedback_element.innerHTML = data;
+                // feedback_element.innerHTML = data;
+            feedback_element.innerHTML = '<font size="2.7">' + data + '</font>';
             feedback_element.hidden = false;
         }
     );
