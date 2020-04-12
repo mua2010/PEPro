@@ -5,14 +5,23 @@
 <div id="requests">
     {% for draft in drafts %}
     <div class="form-check" id="draft{{draft.id}}">
-        <div class="form-group shadow-textarea">
-            <label for="exampleFormControlTextarea6">Your draft to {{draft.reviewee}}</label>
-            <textarea class="form-control z-depth-1" id="exampleFormControlTextarea6" rows="3" placeholder="Write review here...">{{draft.text}}</textarea>
+        <div class="card border-dark mb-3" style="max-width: 50rem;">
+            <div class="card-header">
+                Your draft to: {{draft.reviewee}} <br>
+                <small>{{draft.updated_at}}</small>
+            </div>
+            <div class="card-body text-dark">
+                <div class="form-group shadow-textarea">
+                    <textarea class="form-control z-depth-1" id="draft_text" rows="3" placeholder="Write review here...">{{draft.text}}</textarea>
+                </div>
+                <button class="btn btn-secondary" onClick="submitDraft({{draft.id}}, 'E');">Save Draft</button>
+                <button class="btn btn-success" onClick="submitDraft({{draft.id}}, 'S');">Send Review</button>
+                <br><br>
+                <div class="alert alert-info" role="alert" id="draft{{draft.id}}_feedback" style="max-width: 8rem;" hidden></div>
+
+            </div>
         </div>
-        <button class="btn btn-secondary" onClick="submitDraft({{draft.id}}, 'E');">Save Draft</button>
-        <button class="btn btn-success" onClick="submitDraft({{draft.id}}, 'S');">Send Review</button>
     </div>
-    <div class="subcontent" id="draft{{draft.id}}_feedback" hidden></div>
     <hr> {% endfor %}
     <!--  -->
     {% for request in requests %}
