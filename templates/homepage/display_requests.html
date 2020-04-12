@@ -35,6 +35,7 @@
                     <button class="btn btn-success" id="{{request.id}}-accept" onClick="requestClick({{request.id}}, 'A');">✓</button>
                     <button class="btn btn-danger" id="{{request.id}}-deny" onClick="requestClick({{request.id}}, 'D');">x</button>
                 </div>
+                <div class="alert alert-info" role="alert" id="request{{request.id}}_feedback" hidden></div>
             </div>
         </div>
     </div>
