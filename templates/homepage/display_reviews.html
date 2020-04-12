@@ -5,17 +5,26 @@
 <div id="reviews">
     {% for review in reviews %}
     <div class="form-check" id="review{{review.id}}">
-        <div class="review_head">
-            From {{review.reviewer}}
-        </div>
-        <div class="review_text">
-            {{review.text}}
+        <div class="card border-dark mb-3" style="max-width: 18rem;">
+            <div class="card-header">
+                From: {{review.reviewer}} <br>
+                <small>{{review.updated_at}}</small>
+            </div>
+            <div class="card-body text-dark">
+                <p class="card-text">{{review.text}}</p>
+            </div>
         </div>
     </div>
     <hr> {% endfor %}
 </div>
+<br>
+<br>
 
-<div class="list-group">
+
+
+<br>
+<br>
+<!-- <div class="list-group">
     <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
         <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1">List group item heading</h5>
@@ -24,6 +33,6 @@
         <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
         <small>Donec id elit non mi porta.</small>
     </a>
-</div>
+</div> -->
 
 {% endblock %}
