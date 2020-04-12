@@ -5,13 +5,12 @@
 <div id="requests">
     {% for draft in drafts %}
     <div class="subcontent" id="draft{{draft.id}}">
-        <div class="draft_head">
-            Your draft to {{draft.reviewee}}:
+        <div class="form-group shadow-textarea">
+            <label for="exampleFormControlTextarea6">Your draft to {{draft.reviewee}}</label>
+            <textarea class="form-control z-depth-1" id="exampleFormControlTextarea6" rows="3" placeholder="Write review here...">{{draft.text}}</textarea>
         </div>
-        <textarea id="draft_text">{{draft.text}}</textarea>
-        <br>
-        <button onClick="submitDraft({{draft.id}}, 'E');">Save Draft</button>
-        <button onClick="submitDraft({{draft.id}}, 'S');">Send Review</button>
+        <button class="btn btn-secondary" onClick="submitDraft({{draft.id}}, 'E');">Save Draft</button>
+        <button class="btn btn-success" onClick="submitDraft({{draft.id}}, 'S');">Send Review</button>
     </div>
     <div class="subcontent" id="draft{{draft.id}}_feedback" hidden></div>
     <hr> {% endfor %}
@@ -20,8 +19,8 @@
     <div class="subcontent" id="request{{request.id}}">
         <div class="request_head">
             Request From {{request.requestor}}
-            <button id="{{request.id}}-accept" onClick="requestClick({{request.id}}, 'A');">✓</button>
-            <button id="{{request.id}}-deny" onClick="requestClick({{request.id}}, 'D');">x</button>
+            <button class="btn btn-success" id="{{request.id}}-accept" onClick="requestClick({{request.id}}, 'A');">✓</button>
+            <button class="btn btn-danger" id="{{request.id}}-deny" onClick="requestClick({{request.id}}, 'D');">x</button>
             <br>
         </div>
     </div>
