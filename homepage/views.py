@@ -15,9 +15,6 @@ def homepage(request):
     user = Employee.objects.get(id=100)
     context = {
         "user": user,
-        "reviews": Review.objects.filter(reviewee=user, status=Review.SENT),
-        "drafts": Review.objects.filter(reviewer=user, status=Review.EDITING),
-        "requests": Request.objects.filter(requestee=user, status=Request.PENDING)
     }
     return render(request, "homepage/homepage.html", context)
 
@@ -27,9 +24,7 @@ def display_reviews(request):
     user = Employee.objects.get(id=100)
     context = {
         "user": user,
-        "reviews": Review.objects.filter(reviewee=user, status=Review.SENT),
-        "drafts": Review.objects.filter(reviewer=user, status=Review.EDITING),
-        "requests": Request.objects.filter(requestee=user, status=Request.PENDING)
+        "reviews": Review.objects.filter(reviewee=user, status=Review.SENT).order_by('-updated_at'),
     }
     return render(request, "homepage/display_reviews.html", context)
 
@@ -39,9 +34,9 @@ def display_requests(request):
     user = Employee.objects.get(id=100)
     context = {
         "user": user,
-        "reviews": Review.objects.filter(reviewee=user, status=Review.SENT),
-        "drafts": Review.objects.filter(reviewer=user, status=Review.EDITING),
-        "requests": Request.objects.filter(requestee=user, status=Request.PENDING)
+        "reviews": Review.objects.filter(reviewee=user, status=Review.SENT).order_by('-updated_at'),
+        "drafts": Review.objects.filter(reviewer=user, status=Review.EDITING).order_by('-updated_at'),
+        "requests": Request.objects.filter(requestee=user, status=Request.PENDING).order_by('-created_at')
     }
     return render(request, "homepage/display_requests.html", context)
 
