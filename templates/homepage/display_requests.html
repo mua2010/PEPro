@@ -26,14 +26,18 @@
     <!--  -->
     {% for request in requests %}
     <div class="form-check" id="request{{request.id}}">
-        <div class="request_head">
-            Request From {{request.requestor}}
-            <button class="btn btn-success" id="{{request.id}}-accept" onClick="requestClick({{request.id}}, 'A');">✓</button>
-            <button class="btn btn-danger" id="{{request.id}}-deny" onClick="requestClick({{request.id}}, 'D');">x</button>
-            <br>
+        <div class="card border-dark mb-3" style="max-width: 20rem;">
+            <div class="card-body text-dark">
+                Request From: {{request.requestor}} <br>
+                <small>{{request.created_at}}</small>
+                <div>
+                    <br>
+                    <button class="btn btn-success" id="{{request.id}}-accept" onClick="requestClick({{request.id}}, 'A');">✓</button>
+                    <button class="btn btn-danger" id="{{request.id}}-deny" onClick="requestClick({{request.id}}, 'D');">x</button>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="invalid-feedback" id="request{{request.id}}_feedback" hidden></div>
     <hr> {% endfor %}
 </div>
 
