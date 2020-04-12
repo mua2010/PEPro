@@ -4,7 +4,7 @@
 
 <div id="requests">
     {% for draft in drafts %}
-    <div class="subcontent" id="draft{{draft.id}}">
+    <div class="form-check" id="draft{{draft.id}}">
         <div class="form-group shadow-textarea">
             <label for="exampleFormControlTextarea6">Your draft to {{draft.reviewee}}</label>
             <textarea class="form-control z-depth-1" id="exampleFormControlTextarea6" rows="3" placeholder="Write review here...">{{draft.text}}</textarea>
@@ -16,7 +16,7 @@
     <hr> {% endfor %}
     <!--  -->
     {% for request in requests %}
-    <div class="subcontent" id="request{{request.id}}">
+    <div class="form-check" id="request{{request.id}}">
         <div class="request_head">
             Request From {{request.requestor}}
             <button class="btn btn-success" id="{{request.id}}-accept" onClick="requestClick({{request.id}}, 'A');">✓</button>

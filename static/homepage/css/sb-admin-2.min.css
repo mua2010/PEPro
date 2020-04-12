@@ -2987,12 +2987,12 @@ fieldset:disabled a.btn {
 
 .btn-link {
     font-weight: 400;
-    color: #4e73df;
+    color: #2f9b2c;
     text-decoration: none
 }
 
 .btn-link:hover {
-    color: #224abe;
+    color: #2f9b2c;
     text-decoration: underline
 }
 
