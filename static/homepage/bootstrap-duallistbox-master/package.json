@@ -1,0 +1,27 @@
+{
+  "name": "bootstrap-duallistbox",
+  "title": "Bootstrap Duallistbox",
+  "description": "A responsive dual listbox widget optimized for Twitter Bootstrap. It works on all modern browsers and on touch devices.",
+  "author": {
+    "name": "István Ujj-Mészáros",
+    "url": "https://github.com/istvan-ujjmeszaros"
+  },
+  "contributors": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/istvan-ujjmeszaros/bootstrap-duallistbox.git"
+  },
+  "homepage": "https://www.virtuosoft.eu/code/bootstrap-duallistbox/",
+  "version": "3.0.7",
+  "devDependencies": {
+    "grunt": "^1.0.2",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-jshint": "^1.1.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-uglify": "^3.3.0",
+    "grunt-contrib-cssmin": "^2.2.1"
+  },
+  "scripts": {
+    "test": "grunt travis --verbose"
+  }
+}
