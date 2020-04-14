@@ -89,6 +89,7 @@ def request_review(request):
     user = Employee.objects.get(id=100)
     context = {
         "user": user,
+        "employees": Employee.objects.order_by("first_name").exclude(id=100)
     }
     return render(request, "homepage/request_review.html", context)
 
