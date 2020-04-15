@@ -1,3 +1,18 @@
+function submitRequests(employees, reviewee_id) {
+    console.log(employees);
+    $.post("submitRequests", {
+            csrfmiddlewaretoken: "{{ csrf_token }}",
+            employees: employees,
+            reviewee_id: reviewee_id
+        },
+        function(data, status) {
+            const feedback_element = document.getElementById("new_requests_feedback");
+            feedback_element.innerHTML = '<font size="2.7">' + data + '</font>';
+            feedback_element.hidden = false;
+        }
+    );
+}
+
 function submitRequest(reviewee_email) {
     const reviewer_email = document.getElementById("coworker_email_input").value;
     $.post("request_review_post", {

@@ -32,30 +32,28 @@
         <form class="form-check" id="demoform" action="#" method="post">
             <select multiple="multiple" size="5" name="duallistbox_demo1[]">
                 {% for employee in employees %}
-                    <option value={{employee}}>{{employee}}</option>
+                    <option value={{employee.id}}>{{employee}}</option>
                 {% endfor %}
             </select>
             <br>
+            <div class="alert alert-success" role="alert" style="width: fit-content;" id="new_requests_feedback" hidden></div>
             <button type="submit" class="btn btn-success">Submit Requests</button>
             <br><br>
         </form>
     </div>
 </div>
 
+<!-- https://www.virtuosoft.eu/code/bootstrap-duallistbox/ -->
 <script>
     var demo1 = $('select[name="duallistbox_demo1[]"]').bootstrapDualListbox();
     // console.log(demo1.val());
-    // console.log(this.page.url);
+    // console.log(document.URL); // **** use this for displaying curr page
     $("#demoform").submit(function() {
-        alert($('[name="duallistbox_demo1[]"]').val());
-        return false;
+        var employees = $('[name="duallistbox_demo1[]"]').val();
+        curr_user = "{{ user.id }}";
+        submitRequests(employees, curr_user);
+        return false; //this keep the page (changing to true will refresh the page)
     });
-</script>
-
-<script>
-    // var disqus_config = function() {
-    //     this.page.url = 'https://www.virtuosoft.eu/code/bootstrap-duallistbox/';
-    // };
 </script>
 
 <!-- ========================= -->
