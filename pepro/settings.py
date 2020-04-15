@@ -38,7 +38,7 @@ DEBUG = True
 # ALLOWED_HOSTS = [
 #         "127.0.0.1",
 #         "localhost",
-#         "https://pepro-test.herokuapp.com/",
+#         "pepro-320.herokuapp.com",
 # ]
 ALLOWED_HOSTS = []
 
@@ -173,5 +173,5 @@ FOR SSL-DB-Deployment purpose
 Uncomment
 Heroku deloyment
 '''
-import django_heroku
-django_heroku.settings(locals())
+# import django_heroku
+# django_heroku.settings(locals())
