@@ -52,7 +52,7 @@
         var employees = $('[name="duallistbox_demo1[]"]').val();
         curr_user = "{{ user.id }}";
         submitRequests(employees, curr_user);
-        return false; //this keep the page (changing to true will refresh the page)
+        return false; //this keeps the page when false (changing to true will refresh the page)
     });
 </script>
 

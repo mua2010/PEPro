@@ -1,6 +1,6 @@
 function submitRequests(employees, reviewee_id) {
     console.log(employees);
-    $.post("submitRequests", {
+    $.post("submit_requests", {
             csrfmiddlewaretoken: "{{ csrf_token }}",
             employees: employees,
             reviewee_id: reviewee_id

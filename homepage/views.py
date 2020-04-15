@@ -84,16 +84,16 @@ def submit_draft_post(request):
         return HttpResponse("Draft Saved")
 
 
-# @csrf_exempt
+@csrf_exempt
 def request_review(request):
     user = Employee.objects.get(id=100)
     '''
     following is a way to only show options with no reveiw requests
     '''
-    objects_to_exclude = Request.objects.filter(requestee=user)
+    objects_to_exclude = Request.objects.filter(requestor=user)
     employees_to_exclude = [o.id for o in objects_to_exclude] 
     employees_to_exclude+=[100] # exclude current user as well
-    employess = Employee.objects.exclude(id__in=employees_to_exclude)
+    employees = Employee.objects.exclude(id__in=employees_to_exclude)
 
     '''
     show all emps except current user (and give feedback)
@@ -102,12 +102,12 @@ def request_review(request):
     # breakpoint()
     context = {
         "user": user,
-        "employees": employess
+        "employees": employees
     }
     return render(request, "homepage/request_review.html", context)
 
 @csrf_exempt
-def submitRequests(request):
+def submit_requests(request):
     # breakpoint()
     employees = request.POST.getlist("employees[]")
     print(employees)
