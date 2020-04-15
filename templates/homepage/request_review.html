@@ -13,7 +13,7 @@
 <script src="{% static 'homepage/bootstrap-duallistbox-master/dist/jquery.bootstrap-duallistbox.min.js' %}"></script>
 <link rel="stylesheet" type="text/css" href="{% static 'homepage/bootstrap-duallistbox-master/src/bootstrap-duallistbox.css' %}">
 
-<div class="form-check" id="new_request_input">
+<!-- <div class="form-check" id="new_request_input">
     Co-worker Email: <input id="coworker_email_input" type="text" maxlength="70">
     <br>
     <br>
@@ -21,7 +21,7 @@
     <button class="btn btn-success" onClick="submitRequest('{{user.email}}')">Submit Request</button>
     <br>
     <br>
-</div>
+</div> -->
 <!-- ++++++++++++++++++++++++++++++++++++++++ -->
 
 <!-- Bootstrap Dual Listbox -->
@@ -29,8 +29,8 @@
 
 <div class="row">
     <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-        <form class="form-check" id="demoform" action="#" method="post">
-            <select multiple="multiple" size="5" name="duallistbox_demo1[]">
+        <form class="form-check" id="emp-form" action="#" method="post">
+            <select multiple="multiple" size="5" name="duallistbox[]">
                 {% for employee in employees %}
                     <option value={{employee.id}}>{{employee}}</option>
                 {% endfor %}
@@ -45,11 +45,11 @@
 
 <!-- https://www.virtuosoft.eu/code/bootstrap-duallistbox/ -->
 <script>
-    var demo1 = $('select[name="duallistbox_demo1[]"]').bootstrapDualListbox();
+    var demo1 = $('select[name="duallistbox[]"]').bootstrapDualListbox();
     // console.log(demo1.val());
     // console.log(document.URL); // **** use this for displaying curr page
-    $("#demoform").submit(function() {
-        var employees = $('[name="duallistbox_demo1[]"]').val();
+    $("#emp-form").submit(function() {
+        var employees = $('[name="duallistbox[]"]').val();
         curr_user = "{{ user.id }}";
         submitRequests(employees, curr_user);
         return false; //this keeps the page when false (changing to true will refresh the page)
