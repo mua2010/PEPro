@@ -1,0 +1,26 @@
+<head>
+    <meta charset="UTF-8">
+    <title>Requests</title>
+    <h1>REQUESTS</h1>
+    <a href="/"><-Back to Homepage</a>
+</head>
+​<ul>
+  {% for request in requests %}
+        <!-- {% if request.requestee_id == 6 %} -->
+        <li>
+          <div id={{request.id}}>
+            Request created at: {{ request.created_at}}<br />
+            Requested by: {{request.requestor_id.first_name}} {{request.requestor_id.last_name}}<br/>
+            Status: {{ request.status}}<br/>
+            <button onClick="onClick(request.id, true);">Accept</button>
+            <button onClick="onClick(request.id, false);">Deny</button>
+            <br>
+          </div>
+​
+        </li>
+        <!-- {% endif %} -->
+    {% endfor %}
+    {% if empty %}
+        No Requests
+    {% endif %}
+</ul> 
