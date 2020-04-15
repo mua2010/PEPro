@@ -6,8 +6,19 @@ function submitRequests(employees, reviewee_id) {
             reviewee_id: reviewee_id
         },
         function(data, status) {
+            data = JSON.parse(data);
+            var feedback = data["feedback"];
+            var private_status = data["private_status"];
+
             const feedback_element = document.getElementById("new_requests_feedback");
-            feedback_element.innerHTML = '<font size="2.7">' + data + '</font>';
+
+            if (private_status === 401) {
+                feedback_element.className = "alert alert-danger";
+            }
+            if (private_status === 204) {
+                feedback_element.className = "alert alert-info";
+            }
+            feedback_element.innerHTML = '<font size="2.7">' + feedback + '</font>';
             feedback_element.hidden = false;
         }
     );

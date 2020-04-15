@@ -109,16 +109,44 @@ def request_review(request):
 @csrf_exempt
 def submit_requests(request):
     # breakpoint()
+    response_data = {
+        "feedback": None,
+        "private_status": None
+    }
+    
     employees = request.POST.getlist("employees[]")
-    print(employees)
+    if not employees:
+        response_data["feedback"] = "Please select atleast one empolyee!"
+        response_data["private_status"] = 204
+        return HttpResponse(json.dumps(response_data))
+
     reviewee_id = request.POST["reviewee_id"]
 
     reviewee = Employee.objects.get(id=reviewee_id)
     for e_id in employees:
+        if not Employee.objects.filter(id=e_id).exists():
+            response_data["feedback"] = "Employee does not exist!"
+            response_data["private_status"] = 401
+            return HttpResponse(json.dumps(response_data))
+
+        reviewer = Employee.objects.get(id=e_id)
+        if Request.objects.filter(requestor=reviewee, requestee=reviewer).exists():
+            status_text = "There is already a pending review request to " +  reviewer.first_name + " " + reviewer.last_name + "!"
+            response_data["feedback"] = status_text
+            response_data["private_status"] = 401
+            return HttpResponse(json.dumps(response_data))
+
+        if reviewee_id == reviewer.id:
+            response_data["feedback"] = "You cannot review yourself!"
+            response_data["private_status"] = 401
+            return HttpResponse(json.dumps(response_data))
+
         reviewer = Employee.objects.get(id=e_id)
         Request.objects.create(requestee=reviewer, requestor=reviewee)
 
-    return HttpResponse("Request sent!", status=200)
+    response_data["feedback"] = "Request sent!"
+    response_data["private_status"] = 200
+    return HttpResponse(json.dumps(response_data))
 
 @csrf_exempt
 def request_review_post(request):
