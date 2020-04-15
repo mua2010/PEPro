@@ -148,6 +148,8 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
+# gzip functionality 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 '''
 Uncomment
@@ -171,5 +173,5 @@ FOR SSL-DB-Deployment purpose
 Uncomment
 Heroku deloyment
 '''
-# import django_heroku
-# django_heroku.settings(locals())
+import django_heroku
+django_heroku.settings(locals())
