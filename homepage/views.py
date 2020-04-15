@@ -93,7 +93,7 @@ def request_review(request):
     objects_to_exclude = Request.objects.filter(requestor=user)
     employees_to_exclude = [o.requestee.id for o in objects_to_exclude] 
     employees_to_exclude+=[100] # exclude current user as well
-    employees = Employee.objects.exclude(id__in=employees_to_exclude)#.order_by("first_name")
+    employees = Employee.objects.exclude(id__in=employees_to_exclude).order_by("first_name")
 
     '''
     show all emps except current user (and give feedback)
