@@ -12,6 +12,8 @@ function submitRequests(employees, reviewee_id) {
 
             const feedback_element = document.getElementById("new_requests_feedback");
 
+            feedback_element.className = "alert alert-success";
+
             if (private_status === 401) {
                 feedback_element.className = "alert alert-danger";
             }

@@ -93,7 +93,7 @@ def request_review(request):
     objects_to_exclude = Request.objects.filter(requestor=user)
     employees_to_exclude = [o.requestee.id for o in objects_to_exclude] 
     employees_to_exclude+=[100] # exclude current user as well
-    employees = Employee.objects.exclude(id__in=employees_to_exclude).order_by("first_name")
+    employees = Employee.objects.exclude(id__in=employees_to_exclude).filter(company=user.company).order_by("first_name")
 
     '''
     show all emps except current user (and give feedback)
@@ -148,28 +148,28 @@ def submit_requests(request):
     response_data["private_status"] = 200
     return HttpResponse(json.dumps(response_data))
 
-@csrf_exempt
-def request_review_post(request):
-    reviewee_email = request.POST["reviewee_email"]
-    reviewer_email = request.POST["reviewer_email"]
+# @csrf_exempt
+# def request_review_post(request):
+#     reviewee_email = request.POST["reviewee_email"]
+#     reviewer_email = request.POST["reviewer_email"]
 
-    if not Employee.objects.filter(email=reviewer_email).exists():
-        return HttpResponse("Co-worker's email does not match any emails on record!")
+#     if not Employee.objects.filter(email=reviewer_email).exists():
+#         return HttpResponse("Co-worker's email does not match any emails on record!")
 
-    reviewee = Employee.objects.get(email=reviewee_email)
-    reviewer = Employee.objects.get(email=reviewer_email)
-    if Request.objects.filter(requestor=reviewee, requestee=reviewer).exists():
-        return HttpResponse("There is already a pending review request to this person!")
+#     reviewee = Employee.objects.get(email=reviewee_email)
+#     reviewer = Employee.objects.get(email=reviewer_email)
+#     if Request.objects.filter(requestor=reviewee, requestee=reviewer).exists():
+#         return HttpResponse("There is already a pending review request to this person!")
 
-    if reviewee_email == reviewer_email:
-        return HttpResponse("You cannot review yourself!")
+#     if reviewee_email == reviewer_email:
+#         return HttpResponse("You cannot review yourself!")
 
-    reviewee = Employee.objects.get(email=reviewee_email)
-    reviewer = Employee.objects.get(email=reviewer_email)
+#     reviewee = Employee.objects.get(email=reviewee_email)
+#     reviewer = Employee.objects.get(email=reviewer_email)
 
-    Request.objects.create(requestee=reviewer, requestor=reviewee)
+#     Request.objects.create(requestee=reviewer, requestor=reviewee)
 
-    return HttpResponse("Request sent.", status=200)
+#     return HttpResponse("Request sent.", status=200)
 
 
 # # ===========================================================
