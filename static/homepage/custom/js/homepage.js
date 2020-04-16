@@ -80,7 +80,7 @@ function submitDraft(review_id, status) {
 //     }
 // }
 
-function requestClick(request_id, status) {
+function acceptDenyRequest(request_id, status) {
     $.post("accept_deny_request", {
             csrfmiddlewaretoken: "{{ csrf_token }}",
             request_id: request_id,
