@@ -26,7 +26,7 @@ urlpatterns = [
     path('request_review', views.request_review, name="request_review"),
 
     path('accept_deny_request', views.accept_deny_request, name="accept_deny_request"),
-    path('request_review_post', views.request_review_post, name="request_review_post"),
+    # path('request_review_post', views.request_review_post, name="request_review_post"),
     path('submit_requests', views.submit_requests, name="submit_requests"),
     path('submit_draft_post', views.submit_draft_post, name="submit_draft_post"),
     

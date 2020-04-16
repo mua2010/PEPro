@@ -26,22 +26,22 @@ function submitRequests(employees, reviewee_id) {
     );
 }
 
-function submitRequest(reviewee_email) {
-    const reviewer_email = document.getElementById("coworker_email_input").value;
-    $.post("request_review_post", {
-            csrfmiddlewaretoken: "{{ csrf_token }}",
-            reviewee_email: reviewee_email,
-            reviewer_email: reviewer_email
-        },
-        function(data, status) {
-            const feedback_element = document.getElementById("new_request_feedback");
-            const draft_textarea = document.getElementById("")
-                // feedback_element.innerHTML = data;
-            feedback_element.innerHTML = '<font size="2.7">' + data + '</font>';
-            feedback_element.hidden = false;
-        }
-    );
-}
+// function submitRequest(reviewee_email) {
+//     const reviewer_email = document.getElementById("coworker_email_input").value;
+//     $.post("request_review_post", {
+//             csrfmiddlewaretoken: "{{ csrf_token }}",
+//             reviewee_email: reviewee_email,
+//             reviewer_email: reviewer_email
+//         },
+//         function(data, status) {
+//             const feedback_element = document.getElementById("new_request_feedback");
+//             const draft_textarea = document.getElementById("")
+//                 // feedback_element.innerHTML = data;
+//             feedback_element.innerHTML = '<font size="2.7">' + data + '</font>';
+//             feedback_element.hidden = false;
+//         }
+//     );
+// }
 
 function submitDraft(review_id, status) {
     console.log("submitDraft");
