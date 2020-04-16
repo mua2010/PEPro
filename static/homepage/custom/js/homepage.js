@@ -64,21 +64,21 @@ function submitDraft(review_id, status) {
     );
 }
 
-function navClick(isReviews) {
-    // Called when the 'Reviews' and 'Requests' buttons are pressed
-    // Toggles which view is being shown
-    if (isReviews) {
-        document.getElementById("reviews").hidden = false;
-        document.getElementById("requests").hidden = true;
-        document.getElementById("review_button").disabled = true;
-        document.getElementById("request_button").disabled = false;
-    } else {
-        document.getElementById("reviews").hidden = true;
-        document.getElementById("requests").hidden = false;
-        document.getElementById("review_button").disabled = false;
-        document.getElementById("request_button").disabled = true;
-    }
-}
+// function navClick(isReviews) {
+//     // Called when the 'Reviews' and 'Requests' buttons are pressed
+//     // Toggles which view is being shown
+//     if (isReviews) {
+//         document.getElementById("reviews").hidden = false;
+//         document.getElementById("requests").hidden = true;
+//         document.getElementById("review_button").disabled = true;
+//         document.getElementById("request_button").disabled = false;
+//     } else {
+//         document.getElementById("reviews").hidden = true;
+//         document.getElementById("requests").hidden = false;
+//         document.getElementById("review_button").disabled = false;
+//         document.getElementById("request_button").disabled = true;
+//     }
+// }
 
 function requestClick(request_id, status) {
     $.post("accept_deny_request", {
