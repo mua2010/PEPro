@@ -35,12 +35,12 @@ SECRET_KEY = get_env_value('PEPro_SECRET_KEY', 'SECRET_KEY')
 # DEBUG = True if os.getenv("DEBUG") in ("TRUE", "True", "1") else False
 DEBUG = True
 
-# ALLOWED_HOSTS = [
-#         "127.0.0.1",
-#         "localhost",
-#         "pepro-320.herokuapp.com",
-# ]
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+        "127.0.0.1",
+        "localhost",
+        "pepro-320.herokuapp.com",
+]
+# ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -173,5 +173,5 @@ FOR SSL-DB-Deployment purpose
 Uncomment
 Heroku deloyment
 '''
-# import django_heroku
-# django_heroku.settings(locals())
+import django_heroku
+django_heroku.settings(locals())
