@@ -50,10 +50,8 @@ def accept_deny_request(request):
         curr_request.status = status
         curr_request.save()
         
-        requestor_id = get_object_or_404(
-            Employee, id=curr_request.requestor_id)
-        requestee_id = get_object_or_404(
-            Employee, id=curr_request.requestee_id)
+        requestor_id = Employee.objects.get(id=curr_request.requestor_id)
+        requestee_id = Employee.objects.get(id=curr_request.requestee_id)
 
     response_data = {
         "feedback": None,
