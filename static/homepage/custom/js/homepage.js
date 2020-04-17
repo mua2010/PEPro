@@ -103,27 +103,32 @@ function acceptDenyRequest(request_id, status) {
             var request_feedback = document.getElementById("request" + request_id + "_feedback");
             if (status === "A") {
                 var draft_id = data["id"];
-                var draft_reviewee = data["reviewee"];
+                console.log(draft_id);
+                if (draft_id != null) {
+                    var draft_reviewee = data["reviewee"];
+                    request_feedback.innerHTML = data["feedback"];
 
-                request_feedback.innerHTML = data["feedback"];
-
-                var quick_draft = document.getElementById("quick_draft" + request_id);
-                quick_draft.innerHTML =
-                    '<div class="form-check" id="draft' + draft_id + '">\
-                        <div class="card border-dark mb-3" style="max-width: 50rem;">\
-                            <div class="card-body text-dark">\
-                                <div class="form-group shadow-textarea">\
-                                    <textarea class="form-control z-depth-1" id="draft_text' + draft_id + '" rows="3" placeholder="Write review here..."></textarea>\
+                    var quick_draft = document.getElementById("quick_draft" + request_id);
+                    quick_draft.innerHTML =
+                        '<div class="form-check" id="draft' + draft_id + '">\
+                            <div class="card border-dark mb-3" style="max-width: 50rem;">\
+                                <div class="card-body text-dark">\
+                                    <div class="form-group shadow-textarea">\
+                                        <textarea class="form-control z-depth-1" id="draft_text' + draft_id + '" rows="3" placeholder="Write review here..."></textarea>\
+                                    </div>\
+                                    <button class="btn btn-secondary" id="' + draft_id + '-save" onClick="submitDraft(' + draft_id + ', \'E\');">Save Draft</button>\
+                                    <button class="btn btn-success" id="' + draft_id + '-send" onClick="submitDraft(' + draft_id + ', \'S\');">Send Review</button>\
+                                    <br><br>\
+                                    <div class="alert alert-info" role="alert" id="draft' + draft_id + '_feedback" style="width: fit-content" hidden></div>\
                                 </div>\
-                                <button class="btn btn-secondary" id="' + draft_id + '-save" onClick="submitDraft(' + draft_id + ', \'E\');">Save Draft</button>\
-                                <button class="btn btn-success" id="' + draft_id + '-send" onClick="submitDraft(' + draft_id + ', \'S\');">Send Review</button>\
-                                <br><br>\
-                                <div class="alert alert-info" role="alert" id="draft' + draft_id + '_feedback" style="width: fit-content" hidden></div>\
                             </div>\
-                        </div>\
-                    </div>';
+                        </div>';
 
-                quick_draft.hidden = false;
+                    quick_draft.hidden = false;
+                } else {
+                    request_feedback.innerHTML = data["feedback"];
+                    request_feedback.className = "alert alert-danger";
+                }
             } else if (status === "D") {
                 request_feedback.innerHTML = data["feedback"]
             }
