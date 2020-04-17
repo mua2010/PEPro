@@ -1,6 +1,9 @@
 # For Josh #
 requirements-local.txt
 
+# public github repo files
+static/homepage/bootstrap-duallistbox-master/package-lock.json
+
 # Django #
 *.log
 *.pot
