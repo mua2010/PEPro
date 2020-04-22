@@ -12,9 +12,14 @@ from .models import Review, Request, Employee
 
 
 def homepage(request):
-    user = Employee.objects.get(id=100)
+    user = Employee.objects.get(id=13)
+    manager = Employee.objects.get(id=user.manager_id);
+    underlings = Employee.objects.filter(manager_id=user.id);
+    isManager = (len(underlings) != 0)
     context = {
         "user": user,
+        "isManager": isManager,
+        "manager": manager,
     }
     return render(request, "homepage/homepage.html", context)
 
@@ -32,8 +37,7 @@ def display_reviews(request):
 def display_manager_reviews(request):
     user = Employee.objects.get(id=100)
     underlings = list(Employee.objects.filter(manager_id=13).order_by('last_name'))
-    #underlingIds = underlings.values_list('id', flat=True) #using 11 here because poor ruby has no underlings
-    print ("focus")
+    #underlingIds = underlings.values_list('id', flat=True)
     reviews = Review.objects.filter(reviewee__in=underlings)
     print (reviews)
 

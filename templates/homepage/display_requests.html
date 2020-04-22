@@ -14,8 +14,8 @@
                 <div class="form-group shadow-textarea">
                     <textarea class="form-control z-depth-1" id="draft_text" rows="3" placeholder="Write review here...">{{draft.text}}</textarea>
                 </div>
-                <button class="btn btn-secondary" onClick="submitDraft({{draft.id}}, 'E');">Save Draft</button>
-                <button class="btn btn-success" onClick="submitDraft({{draft.id}}, 'S');">Send Review</button>
+                <button class="btn btn-secondary" onClick="submitDraft('{{draft.id}}', 'E');" style="min-width:17%">Save Draft</button>
+                <button class="btn btn-success" onClick="submitDraft('{{draft.id}}', 'S');" style="min-width:17%">Send Review</button>
                 <br><br>
                 <div class="alert alert-info" role="alert" id="draft{{draft.id}}_feedback" style="max-width: 8rem;" hidden></div>
 
@@ -32,8 +32,8 @@
                 <small>{{request.created_at}}</small>
                 <div>
                     <br>
-                    <button class="btn btn-success" id="{{request.id}}-accept" onClick="requestClick({{request.id}}, 'A');">✓</button>
-                    <button class="btn btn-danger" id="{{request.id}}-deny" onClick="requestClick({{request.id}}, 'D');">x</button>
+                    <button class="btn btn-success" id="{{request.id}}-accept" onClick="acceptDenyRequest('{{request.id}}', 'A');" style="width:40%">Accept</button>
+                    <button class="btn btn-danger" id="{{request.id}}-deny" onClick="acceptDenyRequest('{{request.id}}', 'D');" style="width:40%"> Deny</button>
                 </div>
                 <div class="alert alert-info" role="alert" id="request{{request.id}}_feedback" hidden></div>
             </div>
