@@ -29,7 +29,6 @@ urlpatterns = [
     # path('request_review_post', views.request_review_post, name="request_review_post"),
     path('submit_requests', views.submit_requests, name="submit_requests"),
     path('submit_draft_post', views.submit_draft_post, name="submit_draft_post"),
-    
     # path('index', views.index, name="index"),    
     # path('request_review', views.request_review, name="request_review"),
     # path('view_requests/<str:email>', views.view_requests, name="view_request"),

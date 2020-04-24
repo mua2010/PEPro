@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect
 
 from .forms import RequestReviewForm, GiveReviewForm, NameBox
 from .models import Review, Request, Employee
-
+import datetime
 
 def homepage(request):
     user = Employee.objects.get(id=100)
@@ -27,7 +27,6 @@ def display_reviews(request):
         "reviews": Review.objects.filter(reviewee=user, status=Review.SENT).order_by('-updated_at'),
     }
     return render(request, "homepage/display_reviews.html", context)
-
 
 
 def display_requests(request):
@@ -94,6 +93,7 @@ def request_review(request):
     '''
     following is a way to only show options with no reveiw requests
     '''
+
     objects_to_exclude = Request.objects.filter(requestor=user)
     employees_to_exclude = [o.requestee.id for o in objects_to_exclude] 
     employees_to_exclude+=[100] # exclude current user as well
@@ -112,7 +112,9 @@ def request_review(request):
 
 @csrf_exempt
 def submit_requests(request):
-    # breakpoint()
+    current_time=str(datetime.datetime.now()).split('-')[0:3]
+    
+
     response_data = {
         "feedback": None,
         "private_status": None
@@ -125,8 +127,18 @@ def submit_requests(request):
         return HttpResponse(json.dumps(response_data))
 
     reviewee_id = request.POST["reviewee_id"]
-
     reviewee = Employee.objects.get(id=reviewee_id)
+
+    if((reviewee.last_request_date[i]==current_time[i]) for i in range(3)):
+        if(reviewee.today_request==reviewee.max_request):
+            response_data["feedback"]="Warning: You have reached maximum of requests today:10"
+            response_data["private_status"]=404
+            return HttpResponse(json.dumps(response_data))
+    else:
+        reviewee.last_request_date = current_time
+        reviewee.today_request = 0 #New Day, reset counter
+
+    # breakpoint()
     for e_id in employees:
         if not Employee.objects.filter(id=e_id).exists():
             response_data["feedback"] = "Employee does not exist!"
@@ -149,6 +161,7 @@ def submit_requests(request):
         Request.objects.create(requestee=reviewer, requestor=reviewee)
 
     response_data["feedback"] = "Request sent!"
+    reviewee.today_request+=1 #today_request +1 for this user
     response_data["private_status"] = 200
     return HttpResponse(json.dumps(response_data))
 
