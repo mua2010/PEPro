@@ -16,7 +16,7 @@ def homepage(request):
     context = {
         "user": user,
     }
-    return render(request, "homepage/homepage.html", context)
+    return render(request, "homepage/Home.html", context)
 
 
 

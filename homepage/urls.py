@@ -20,7 +20,7 @@ from . import views
 app_name = 'homepage'
 
 urlpatterns = [
-    path('', views.homepage, name="homepage"),
+    path('', views.homepage, name="Home"),
     path('display_requests', views.display_requests, name="display_requests"),
     path('display_reviews', views.display_reviews, name="display_reviews"),
     path('request_review', views.request_review, name="request_review"),
