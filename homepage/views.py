@@ -13,8 +13,8 @@ from .models import Review, Request, Employee
 
 def homepage(request):
     user = Employee.objects.get(id=13)
-    manager = Employee.objects.get(id=user.manager_id);
-    underlings = Employee.objects.filter(manager_id=user.id);
+    manager = Employee.objects.get(id=user.manager_id)
+    underlings = Employee.objects.filter(manager_id=user.id)
     isManager = (len(underlings) != 0)
     context = {
         "user": user,
@@ -27,24 +27,29 @@ def homepage(request):
 
 def display_reviews(request):
     user = Employee.objects.get(id=100)
+    underlings = Employee.objects.filter(manager_id=user.id)
+    isManager = (len(underlings) != 0)
     context = {
         "user": user,
         "reviews": Review.objects.filter(reviewee=user, status=Review.SENT).order_by('-updated_at'),
+        "isManager": isManager,
+
     }
     return render(request, "homepage/display_reviews.html", context)
 
 
 def display_manager_reviews(request):
-    user = Employee.objects.get(id=100)
-    underlings = list(Employee.objects.filter(manager_id=13).order_by('last_name'))
-    #underlingIds = underlings.values_list('id', flat=True)
+    user = Employee.objects.get(id=13)
+    underlings = list(Employee.objects.filter(manager_id=user.id).order_by('last_name'))
+    isManager = (len(underlings) != 0)
+
     reviews = Review.objects.filter(reviewee__in=underlings)
-    print (reviews)
 
     context = {
         "user": user,
         "reviews": reviews,
         "underlings": underlings,
+        "isManager": isManager,
     }
     return render(request, "homepage/display_manager_reviews.html", context)
 
@@ -53,11 +58,14 @@ def display_manager_reviews(request):
 
 def display_requests(request):
     user = Employee.objects.get(id=100)
+    underlings = list(Employee.objects.filter(manager_id=user.id))
+    isManager = (len(underlings) != 0)
     context = {
         "user": user,
         "reviews": Review.objects.filter(reviewee=user, status=Review.SENT).order_by('-updated_at'),
         "drafts": Review.objects.filter(reviewer=user, status=Review.EDITING).order_by('-updated_at'),
-        "requests": Request.objects.filter(requestee=user, status=Request.PENDING).order_by('-created_at')
+        "requests": Request.objects.filter(requestee=user, status=Request.PENDING).order_by('-created_at'),
+        "isManager": isManager,
     }
     return render(request, "homepage/display_requests.html", context)
 
