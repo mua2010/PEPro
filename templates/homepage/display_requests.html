@@ -13,7 +13,7 @@
 			</div>
 		</div>
 	</div>
-	{% endif %}
+	{% else %}
     {% for draft in drafts %}
     <div class="form-check" id="draft{{draft.id}}">
         <div class="card border-dark mb-3 shadow" style="max-width: 50rem;">
@@ -51,6 +51,7 @@
         </div>
     </div>
     <hr> {% endfor %}
+	{% endif %}
 </div>
 
 {% endblock %}
