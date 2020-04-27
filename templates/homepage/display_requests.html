@@ -1,23 +1,38 @@
 {% extends 'homepage/homepage.html' %}
 <!--  -->
-{% block content %} {% for draft in drafts %}
-<div class="form-check" id="draft{{draft.id}}">
-    <div class="card border-dark mb-3" style="max-width: 50rem;">
-        <div class="card-header">
-            Your draft to: {{draft.reviewee}} <br>
-            <small>{{draft.updated_at}}</small>
-        </div>
+{% block content %}
+
+
+<div id="requests">
+	<!-- checking for any requests, displays this instead of blank page-->
+	{% if drafts_count == 0 and requests_count == 0 %}
+	<div class="p-3">
+		<div class="card border-dark shadow" style="max-width: 50rem;">
+			<div class="card-header">
+				<font style="color:black">No Pending Requests</font>
+			</div>
+		</div>
+	</div>
+	{% else %}
+    {% for draft in drafts %}
+    <div class="form-check" id="draft{{draft.id}}">
+        <div class="card border-dark mb-3 shadow" style="max-width: 50rem;">
+            <div class="card-header">
+                Your draft to: {{draft.reviewee}} <br>
+                <small>{{draft.updated_at}}</small>
         <div class="card-body text-dark">
             <div class="form-group shadow-textarea">
                 <textarea class="form-control z-depth-1" id="draft_text{{draft.id}}" rows="3" placeholder="Write review here...">{{draft.text}}</textarea>
             </div>
+        </div>
+
             <button class="btn btn-secondary" id="{{draft.id}}-save" onClick="submitDraft('{{draft.id}}', 'E');">Save Draft</button>
             <button class="btn btn-success" id="{{draft.id}}-send" onClick="submitDraft('{{draft.id}}', 'S');">Send Review</button>
             <br><br>
             <div class="alert alert-info" role="alert" id="draft{{draft.id}}_feedback" style="width: fit-content" hidden></div>
-
         </div>
     </div>
+
 </div>
 <hr> {% endfor %}
 <!--  -->
@@ -36,8 +51,8 @@
             <div id="quick_draft{{request.id}}" style="width: fit-content" hidden></div>
         </div>
     </div>
-</div>
-<hr> {% endfor %}
+    <hr> {% endfor %}
+	{% endif %}
 </div>
 
 {% endblock %}

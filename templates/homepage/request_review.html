@@ -32,7 +32,7 @@
         <form class="form-check" id="emp-form" action="#" method="post">
             <select multiple="multiple" size="5" name="duallistbox[]">
                 {% for employee in employees %}
-                    <option value={{employee.id}}>{{employee}}</option>
+                    <option value={{employee.id}}>{{employee}} ({{employee.email}})</option>
                 {% endfor %}
             </select>
             <br>
