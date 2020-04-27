@@ -11,13 +11,14 @@
             <div class="form-group shadow-textarea">
                 <textarea class="form-control z-depth-1" id="draft_text{{draft.id}}" rows="3" placeholder="Write review here...">{{draft.text}}</textarea>
             </div>
+
             <button class="btn btn-secondary" id="{{draft.id}}-save" onClick="submitDraft('{{draft.id}}', 'E');">Save Draft</button>
             <button class="btn btn-success" id="{{draft.id}}-send" onClick="submitDraft('{{draft.id}}', 'S');">Send Review</button>
             <br><br>
             <div class="alert alert-info" role="alert" id="draft{{draft.id}}_feedback" style="width: fit-content" hidden></div>
-
         </div>
     </div>
+
 </div>
 <hr> {% endfor %}
 <!--  -->

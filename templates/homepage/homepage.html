@@ -33,6 +33,8 @@
 
 <body id="page-top">
 
+
+
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -68,12 +70,27 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="display_reviews">
                     <!-- <i class="fas fa-fw fa-cog"></i> -->
-                    <span>My Reviews</span>
+                  <span>My Reviews</span>
                 </a>
             </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider">
+
+            {% if isManager %}
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+              <a class="nav-link collapsed" href="display_manager_reviews">
+                <!-- <i class="fas fa-fw fa-cog"></i> -->
+                <span>My Underling's Reviews</span>
+              </a>
+            </li>
+
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+            {% endif %}
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
@@ -107,7 +124,11 @@
                 <!-- End of Topbar -->
 
                 <!-- Page Content -->
-                {% block content %} {% endblock %}
+                {% block content %}
+                Welcome {{user}}
+                <br><br> Manager: {{manager}}
+                <br> Email: {{manager.email}}
+                {% endblock %}
                 <!-- End Page Content -->
 
                 <!-- End of Main Content -->
