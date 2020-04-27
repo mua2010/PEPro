@@ -9,12 +9,17 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect
 
 from .forms import RequestReviewForm, GiveReviewForm, NameBox
 from .models import Review, Request, Employee
-import datetime
+
 
 def homepage(request):
-    user = Employee.objects.get(id=100)
+    user = Employee.objects.get(id=13)
+    manager = Employee.objects.get(id=user.manager_id)
+    underlings = Employee.objects.filter(manager_id=user.id)
+    isManager = (len(underlings) != 0)
     context = {
         "user": user,
+        "isManager": isManager,
+        "manager": manager,
     }
     return render(request, "homepage/homepage.html", context)
 
@@ -27,6 +32,26 @@ def display_reviews(request):
         "reviews": Review.objects.filter(reviewee=user, status=Review.SENT).order_by('-updated_at'),
     }
     return render(request, "homepage/display_reviews.html", context)
+
+
+def display_manager_reviews(request):
+    user = Employee.objects.get(id=100)
+    underlings = list(Employee.objects.filter(manager_id=13).order_by('last_name'))
+    #underlingIds = underlings.values_list('id', flat=True)
+    reviews = Review.objects.filter(reviewee__in=underlings)
+    #print (reviews)
+    numRevs = ""
+    for underl in underlings:
+        numRevs+=str(underl.id) + ":" + str(Review.objects.filter(reviewee=underl, status=Review.SENT).count()) + ","
+    context = {
+        "user": user,
+        "reviews": reviews,
+        "underlings": underlings,
+        "numRevs": numRevs,
+    }
+    return render(request, "homepage/display_manager_reviews.html", context)
+
+
 
 
 def display_requests(request):
@@ -42,26 +67,22 @@ def display_requests(request):
 @csrf_exempt
 def accept_deny_request(request):
     data = request.POST
-    status = None
-    response_data = {
-        "feedback": None,
-        "id": None
-    }
-
+    
     if Request.objects.filter(id=data["request_id"], status=Request.PENDING).exists():
         curr_request = Request.objects.get(id=data["request_id"], status=Request.PENDING)
         status = data["status"]
         curr_request.status = status
         curr_request.save()
         
-        requestor_id = Employee.objects.get(id=curr_request.requestor_id)
-        requestee_id = Employee.objects.get(id=curr_request.requestee_id)
+        requestor_id = get_object_or_404(
+            Employee, id=curr_request.requestor_id)
+        requestee_id = get_object_or_404(
+            Employee, id=curr_request.requestee_id)
 
-    else:
-        response_data["feedback"] = "You have already accepted reveiw request from this co-worker!"
-        return HttpResponse(json.dumps(response_data))
-
-    
+    response_data = {
+        "feedback": None,
+        "id": None
+    }
     if status == "A":
         review = Review.objects.create(reviewer=requestee_id, reviewee=requestor_id)
         response_data["feedback"] = "Request Accepted"
@@ -93,7 +114,6 @@ def request_review(request):
     '''
     following is a way to only show options with no reveiw requests
     '''
-
     objects_to_exclude = Request.objects.filter(requestor=user)
     employees_to_exclude = [o.requestee.id for o in objects_to_exclude] 
     employees_to_exclude+=[100] # exclude current user as well
@@ -112,9 +132,7 @@ def request_review(request):
 
 @csrf_exempt
 def submit_requests(request):
-    current_time=str(datetime.datetime.now()).split('-')[0:3]
-    
-
+    # breakpoint()
     response_data = {
         "feedback": None,
         "private_status": None
@@ -127,18 +145,8 @@ def submit_requests(request):
         return HttpResponse(json.dumps(response_data))
 
     reviewee_id = request.POST["reviewee_id"]
+
     reviewee = Employee.objects.get(id=reviewee_id)
-
-    if((reviewee.last_request_date[i]==current_time[i]) for i in range(3)):
-        if(reviewee.today_request==reviewee.max_request):
-            response_data["feedback"]="Warning: You have reached maximum of requests today:10"
-            response_data["private_status"]=404
-            return HttpResponse(json.dumps(response_data))
-    else:
-        reviewee.last_request_date = current_time
-        reviewee.today_request = 0 #New Day, reset counter
-
-    # breakpoint()
     for e_id in employees:
         if not Employee.objects.filter(id=e_id).exists():
             response_data["feedback"] = "Employee does not exist!"
@@ -161,7 +169,6 @@ def submit_requests(request):
         Request.objects.create(requestee=reviewer, requestor=reviewee)
 
     response_data["feedback"] = "Request sent!"
-    reviewee.today_request+=1 #today_request +1 for this user
     response_data["private_status"] = 200
     return HttpResponse(json.dumps(response_data))
 
