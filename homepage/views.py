@@ -11,8 +11,11 @@ from .forms import RequestReviewForm, GiveReviewForm, NameBox
 from .models import Review, Request, Employee
 
 def homepage(request):
-    user = Employee.objects.get(id=100)
-    manager = Employee.objects.get(id = user.manager_id)
+
+    user = Employee.objects.get(id=13)
+    manager = Employee.objects.get(id=user.manager_id)
+    underlings = Employee.objects.filter(manager_id=user.id)
+    isManager = (len(underlings) != 0)
     context = {
         "manager":manager,
         "user": user,
@@ -40,25 +43,29 @@ def account_info(request):
 
 def display_reviews(request):
     user = Employee.objects.get(id=100)
+    underlings = Employee.objects.filter(manager_id=user.id)
+    isManager = (len(underlings) != 0)
     context = {
         "user": user,
         "reviews": Review.objects.filter(reviewee=user, status=Review.SENT).order_by('-updated_at'),
+        "isManager": isManager,
+
     }
     return render(request, "homepage/display_reviews.html", context)
 
 
 def display_manager_reviews(request):
-    user = Employee.objects.get(id=100)
-    underlings = list(Employee.objects.filter(manager_id=13).order_by('last_name'))
-    #underlingIds = underlings.values_list('id', flat=True) #using 11 here because poor ruby has no underlings
-    print ("focus")
+
+    user = Employee.objects.get(id=13)
+    underlings = list(Employee.objects.filter(manager_id=user.id).order_by('last_name'))
+    isManager = (len(underlings) != 0)
     reviews = Review.objects.filter(reviewee__in=underlings)
-    print (reviews)
 
     context = {
         "user": user,
         "reviews": reviews,
         "underlings": underlings,
+        "isManager": isManager,
     }
     return render(request, "homepage/display_manager_reviews.html", context)
 
@@ -67,36 +74,42 @@ def display_manager_reviews(request):
 
 def display_requests(request):
     user = Employee.objects.get(id=100)
+    underlings = list(Employee.objects.filter(manager_id=user.id))
+    isManager = (len(underlings) != 0)
     context = {
         "user": user,
         "reviews": Review.objects.filter(reviewee=user, status=Review.SENT).order_by('-updated_at'),
         "drafts": Review.objects.filter(reviewer=user, status=Review.EDITING).order_by('-updated_at'),
         "requests": Request.objects.filter(requestee=user, status=Request.PENDING).order_by('-created_at'),
-         # Two variables below are for checking a blank page(no pending or editing reviews)
         "drafts_count": Review.objects.filter(reviewer=user, status=Review.EDITING).count(),
         "requests_count": Request.objects.filter(requestee=user, status=Request.PENDING).count(),
+        "isManager": isManager,
     }
     return render(request, "homepage/display_requests.html", context)
 
 @csrf_exempt
 def accept_deny_request(request):
     data = request.POST
-    
+    status = None
+    response_data = {
+        "feedback": None,
+        "id": None
+    }
+
     if Request.objects.filter(id=data["request_id"], status=Request.PENDING).exists():
         curr_request = Request.objects.get(id=data["request_id"], status=Request.PENDING)
         status = data["status"]
         curr_request.status = status
         curr_request.save()
         
-        requestor_id = get_object_or_404(
-            Employee, id=curr_request.requestor_id)
-        requestee_id = get_object_or_404(
-            Employee, id=curr_request.requestee_id)
+        requestor_id = Employee.objects.get(id=curr_request.requestor_id)
+        requestee_id = Employee.objects.get(id=curr_request.requestee_id)
 
-    response_data = {
-        "feedback": None,
-        "id": None
-    }
+    else:
+        response_data["feedback"] = "You have already accepted reveiw request from this co-worker!"
+        return HttpResponse(json.dumps(response_data))
+
+    
     if status == "A":
         review = Review.objects.create(reviewer=requestee_id, reviewee=requestor_id)
         response_data["feedback"] = "Request Accepted"
