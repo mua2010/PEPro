@@ -72,22 +72,26 @@ def display_requests(request):
 @csrf_exempt
 def accept_deny_request(request):
     data = request.POST
-    
+    status = None
+    response_data = {
+        "feedback": None,
+        "id": None
+    }
+
     if Request.objects.filter(id=data["request_id"], status=Request.PENDING).exists():
         curr_request = Request.objects.get(id=data["request_id"], status=Request.PENDING)
         status = data["status"]
         curr_request.status = status
         curr_request.save()
         
-        requestor_id = get_object_or_404(
-            Employee, id=curr_request.requestor_id)
-        requestee_id = get_object_or_404(
-            Employee, id=curr_request.requestee_id)
+        requestor_id = Employee.objects.get(id=curr_request.requestor_id)
+        requestee_id = Employee.objects.get(id=curr_request.requestee_id)
 
-    response_data = {
-        "feedback": None,
-        "id": None
-    }
+    else:
+        response_data["feedback"] = "You have already accepted reveiw request from this co-worker!"
+        return HttpResponse(json.dumps(response_data))
+
+    
     if status == "A":
         review = Review.objects.create(reviewer=requestee_id, reviewee=requestor_id)
         response_data["feedback"] = "Request Accepted"
