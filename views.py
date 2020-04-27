@@ -10,47 +10,26 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from .forms import RequestReviewForm, GiveReviewForm, NameBox
 from .models import Review, Request, Employee
 
+
 def homepage(request):
     user = Employee.objects.get(id=13)
     manager = Employee.objects.get(id=user.manager_id)
     underlings = Employee.objects.filter(manager_id=user.id)
     isManager = (len(underlings) != 0)
     context = {
-        "manager":manager,
         "user": user,
         "isManager": isManager,
         "manager": manager,
     }
     return render(request, "homepage/homepage.html", context)
 
-def account_info(request):
-    user = Employee.objects.get(id=100)
-    manager = Employee.objects.get(id = user.manager_id)
-    review_count = Review.objects.filter(reviewer=user, status=Review.SENT).count()
-    reviewee_count = Review.objects.filter(reviewee=user, status=Review.SENT).count()
-    request_count = Request.objects.filter(requestee=user, status=Request.PENDING).count()
-    requestee_count = Request.objects.filter(requestor=user, status=Request.PENDING).count()
-    context = {
-        "manager":manager,
-        "user": user,
-        "review_count":review_count,
-        "reviewee_count":reviewee_count,
-        "request_count":request_count,
-        "requestee_count":requestee_count
-    }
-    return render(request, "homepage/account_info.html", context)
-
 
 
 def display_reviews(request):
     user = Employee.objects.get(id=100)
-    underlings = Employee.objects.filter(manager_id=user.id)
-    isManager = (len(underlings) != 0)
     context = {
         "user": user,
         "reviews": Review.objects.filter(reviewee=user, status=Review.SENT).order_by('-updated_at'),
-        "isManager": isManager,
-
     }
     return render(request, "homepage/display_reviews.html", context)
 
@@ -64,14 +43,11 @@ def display_manager_reviews(request):
     numRevs = ""
     for underl in underlings:
         numRevs+=str(underl.id) + ":" + str(Review.objects.filter(reviewee=underl, status=Review.SENT).count()) + ","
-    isManager = (len(underlings) != 0)
-
     context = {
         "user": user,
         "reviews": reviews,
         "underlings": underlings,
         "numRevs": numRevs,
-        "isManager": isManager,
     }
     return render(request, "homepage/display_manager_reviews.html", context)
 
@@ -80,16 +56,11 @@ def display_manager_reviews(request):
 
 def display_requests(request):
     user = Employee.objects.get(id=100)
-    underlings = list(Employee.objects.filter(manager_id=user.id))
-    isManager = (len(underlings) != 0)
     context = {
         "user": user,
         "reviews": Review.objects.filter(reviewee=user, status=Review.SENT).order_by('-updated_at'),
         "drafts": Review.objects.filter(reviewer=user, status=Review.EDITING).order_by('-updated_at'),
-        "requests": Request.objects.filter(requestee=user, status=Request.PENDING).order_by('-created_at'),
-        "drafts_count": Review.objects.filter(reviewer=user, status=Review.EDITING).count(),
-        "requests_count": Request.objects.filter(requestee=user, status=Request.PENDING).count(),
-        "isManager": isManager,
+        "requests": Request.objects.filter(requestee=user, status=Request.PENDING).order_by('-created_at')
     }
     return render(request, "homepage/display_requests.html", context)
 
@@ -228,17 +199,7 @@ def submit_requests(request):
 # # ===========================================================
 # # Not sure if this should be a view but it was how I figured out how to run a script
 
-def insert_employees(request):
-    from insert_employees import insert_employees
-    insert_employees(json_file_name="employees.json")
-    return HttpResponse("Inserted employees")
-
-def login(request):
-    
-	return render(request, "login.html", {'form':form})
-
 # def insert_employees(request):
 #     from insert_employees import insert_employees
 #     insert_employees(json_file_name="employees.json")
 #     return HttpResponse("Inserted employees")
-# >>>>>>> cad4e2d4e0b80d50ecdca68b5b0d2b6be2862c5f
