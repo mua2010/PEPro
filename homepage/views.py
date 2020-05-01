@@ -24,7 +24,7 @@ def homepage(request):
     return render(request, "homepage/homepage.html", context)
 
 def account_info(request):
-    user = Employee.objects.get(id=100)
+    user = Employee.objects.get(id=13)
     manager = Employee.objects.get(id = user.manager_id)
     review_count = Review.objects.filter(reviewer=user, status=Review.SENT).count()
     reviewee_count = Review.objects.filter(reviewee=user, status=Review.SENT).count()
@@ -43,7 +43,7 @@ def account_info(request):
 
 
 def display_reviews(request):
-    user = Employee.objects.get(id=100)
+    user = Employee.objects.get(id=13)
     underlings = Employee.objects.filter(manager_id=user.id)
     isManager = (len(underlings) != 0)
     context = {
@@ -56,10 +56,10 @@ def display_reviews(request):
 
 
 def display_manager_reviews(request):
-    user = Employee.objects.get(id=100)
+    user = Employee.objects.get(id=13)
     underlings = list(Employee.objects.filter(manager_id=13).order_by('last_name'))
     #underlingIds = underlings.values_list('id', flat=True)
-    reviews = Review.objects.filter(reviewee__in=underlings)
+    reviews = Review.objects.filter(reviewee__in=underlings, status='S')
     #print (reviews)
     numRevs = ""
     for underl in underlings:
@@ -79,7 +79,7 @@ def display_manager_reviews(request):
 
 
 def display_requests(request):
-    user = Employee.objects.get(id=100)
+    user = Employee.objects.get(id=13)
     underlings = list(Employee.objects.filter(manager_id=user.id))
     isManager = (len(underlings) != 0)
     context = {
@@ -139,7 +139,7 @@ def submit_draft_post(request):
 
 @csrf_exempt
 def request_review(request):
-    user = Employee.objects.get(id=100)
+    user = Employee.objects.get(id=13)
     '''
     following is a way to only show options with no reveiw requests
     '''
@@ -233,9 +233,9 @@ def insert_employees(request):
     insert_employees(json_file_name="employees.json")
     return HttpResponse("Inserted employees")
 
-def login(request):
+# def login(request):
     
-	return render(request, "login.html", {'form':form})
+# 	return render(request, "login.html", {'form':form})
 
 # def insert_employees(request):
 #     from insert_employees import insert_employees
