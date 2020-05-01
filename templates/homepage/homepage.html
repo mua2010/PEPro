@@ -33,6 +33,8 @@
 
 <body id="page-top">
 
+
+
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -52,7 +54,18 @@
 
             <!-- Divider -->
             <hr class="sidebar-divider">
-
+			
+			 <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="account_info">
+                    <!-- <i class="fas fa-fw fa-cog"></i> -->
+                    <span>Account Information</span>
+                </a>
+            </li>
+						
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+			
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="request_review">
@@ -68,12 +81,27 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="display_reviews">
                     <!-- <i class="fas fa-fw fa-cog"></i> -->
-                    <span>My Reviews</span>
+                  <span>My Reviews</span>
                 </a>
             </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider">
+
+            {% if isManager %}
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+              <a class="nav-link collapsed" href="display_manager_reviews">
+                <!-- <i class="fas fa-fw fa-cog"></i> -->
+                <span>My Underling's Reviews</span>
+              </a>
+            </li>
+
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+            {% endif %}
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
@@ -104,12 +132,15 @@
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3"><i class="fa fa-bars"></i></button>
 
                     <!-- Topbar Navbar -->
-                    <a class="navbar-nav ml-auto">{{user}}</a>
+					<a class="navbar-nav mr-auto" style="color:black"><b>{{user.company}}</b></a>
+                    <a class="navbar-nav ml-auto" style="color:black"><b>{{user}}</b></a>
                 </nav>
                 <!-- End of Topbar -->
 
                 <!-- Page Content -->
-                {% block content %} {% endblock %}
+                {% block content %}
+
+                {% endblock %}
                 <!-- End Page Content -->
 
                 <!-- End of Main Content -->
