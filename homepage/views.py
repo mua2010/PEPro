@@ -29,7 +29,7 @@ def account_info(request):
     review_count = Review.objects.filter(reviewer=user, status=Review.SENT).count()
     reviewee_count = Review.objects.filter(reviewee=user, status=Review.SENT).count()
     request_count = Request.objects.filter(requestee=user, status=Request.PENDING).count()
-    requestee_count = Request.objects.filter(requestor=user, status=Request.PENDING).count()
+    requestee_count = Request.objects.filter(requestor=user).count()
     context = {
         "manager":manager,
         "user": user,
@@ -139,13 +139,14 @@ def submit_draft_post(request):
 
 @csrf_exempt
 def request_review(request):
-    user = Employee.objects.get(id=13)
+    u_id=13
+    user = Employee.objects.get(id=u_id)
     '''
     following is a way to only show options with no reveiw requests
     '''
     objects_to_exclude = Request.objects.filter(requestor=user)
     employees_to_exclude = [o.requestee.id for o in objects_to_exclude] 
-    employees_to_exclude+=[100] # exclude current user as well
+    employees_to_exclude+=[u_id] # exclude current user as well
     employees = Employee.objects.exclude(id__in=employees_to_exclude).filter(company=user.company).order_by("first_name")
 
     '''
