@@ -4,55 +4,54 @@
 
 
 <div id="requests">
-	<!-- checking for any requests, displays this instead of blank page-->
-	{% if drafts_count == 0 and requests_count == 0 %}
-	<div class="p-3">
-		<div class="card border-dark shadow" style="max-width: 50rem;">
-			<div class="card-header">
-				<font style="color:black">No Pending Requests</font>
-			</div>
-		</div>
-	</div>
-	{% else %}
-    {% for draft in drafts %}
+    <!-- checking for any requests, displays this instead of blank page-->
+    {% if drafts_count == 0 and requests_count == 0 %}
+    <div class="p-3">
+        <div class="card border-dark shadow" style="max-width: 50rem;">
+            <div class="card-header">
+                <font style="color:black">No Pending Requests</font>
+            </div>
+        </div>
+    </div>
+    {% else %} {% for draft in drafts %}
     <div class="form-check" id="draft{{draft.id}}">
         <div class="card border-dark mb-3 shadow" style="max-width: 50rem;">
             <div class="card-header">
                 Your draft to: {{draft.reviewee}} <br>
                 <small>{{draft.updated_at}}</small>
-        <div class="card-body text-dark">
-            <div class="form-group shadow-textarea">
-                <textarea class="form-control z-depth-1" id="draft_text{{draft.id}}" rows="3" placeholder="Write review here...">{{draft.text}}</textarea>
+                <div class="card-body text-dark">
+                    <div class="form-group shadow-textarea">
+                        <textarea class="form-control z-depth-1" id="draft_text{{draft.id}}" rows="3" placeholder="Write review here...">{{draft.text}}</textarea>
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" id="{{draft.id}}-save" onClick="submitDraft('{{draft.id}}', 'E');">Save Draft</button>
+                <button class="btn btn-success" id="{{draft.id}}-send" onClick="submitDraft('{{draft.id}}', 'S');">Send Review</button>
+                <br><br>
+                <div class="alert alert-info" role="alert" id="draft{{draft.id}}_feedback" style="width: fit-content" hidden></div>
             </div>
         </div>
 
-            <button class="btn btn-secondary" id="{{draft.id}}-save" onClick="submitDraft('{{draft.id}}', 'E');">Save Draft</button>
-            <button class="btn btn-success" id="{{draft.id}}-send" onClick="submitDraft('{{draft.id}}', 'S');">Send Review</button>
-            <br><br>
-            <div class="alert alert-info" role="alert" id="draft{{draft.id}}_feedback" style="width: fit-content" hidden></div>
-        </div>
-    </div>
-
-</div>
-<hr> {% endfor %}
-<!--  -->
-{% for request in requests %}
-<div class="form-check" id="request{{request.id}}">
-    <div class="card border-dark mb-3" style="width: fit-content">
-        <div class="card-body text-dark">
-            Request From: {{request.requestor}} <br>
-            <small>{{request.created_at}}</small>
-            <div>
-                <br>
-                <button class="btn btn-success" id="{{request.id}}-accept" onClick="acceptDenyRequest('{{request.id}}', 'A');">✓</button>
-                <button class="btn btn-danger" id="{{request.id}}-deny" onClick="acceptDenyRequest('{{request.id}}', 'D');">x</button>
-            </div>
-            <div class="alert alert-info" role="alert" id="request{{request.id}}_feedback" hidden></div>
-            <div id="quick_draft{{request.id}}" style="width: fit-content" hidden></div>
-        </div>
     </div>
     <hr> {% endfor %}
-	{% endif %}
-</div>
+    <!--  -->
 
-{% endblock %}
+    <div class="form-check" id="request{{request.id}}">
+        {% for request in requests %}
+        <div class="card border-dark mb-3" style="width: fit-content">
+            <div class="card-body text-dark">
+                Request From: {{request.requestor}} <br>
+                <small>{{request.created_at}}</small>
+                <div>
+                    <br>
+                    <button class="btn btn-success" id="{{request.id}}-accept" onClick="acceptDenyRequest('{{request.id}}', 'A');">✓</button>
+                    <button class="btn btn-danger" id="{{request.id}}-deny" onClick="acceptDenyRequest('{{request.id}}', 'D');">x</button>
+                </div>
+                <div class="alert alert-info" role="alert" id="request{{request.id}}_feedback" hidden></div>
+                <div id="quick_draft{{request.id}}" style="width: fit-content" hidden></div>
+            </div>
+        </div>
+        {% endfor %} {% endif %}
+    </div>
+
+    {% endblock %}
