@@ -15,12 +15,12 @@ class Employee(models.Model):
     first_name = models.CharField(max_length=35)
     last_name = models.CharField(max_length=35)
     manager_id = models.IntegerField(blank=True, null=True)
-    max_request=10
-    today_request=0
     company = models.ForeignKey(
         Company, on_delete=models.CASCADE, related_name='company_id2unique_id')
-    
-    last_request_date=str(datetime.datetime.now()).split('-')[0:3] #datetime.datetime.now() is a string: "2019-02-30 05:30:30" this is the format.
+    position_title = models.CharField(max_length=70, default='')
+    password = models.CharField(max_length=100, default='')
+    start_date = models.CharField(max_length=15, default='')
+
     def __str__(self):
         full_name = "%s %s" % (self.first_name, self.last_name)
         return full_name
