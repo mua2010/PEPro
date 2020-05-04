@@ -25,8 +25,9 @@ urlpatterns = [
     path('display_reviews', views.display_reviews, name="display_reviews"),
     path('request_review', views.request_review, name="request_review"),
     path('account_info', views.account_info, name="account_info"),
-
     path('display_manager_reviews', views.display_manager_reviews, name="display_manager_reviews"),
+    path('view_sent_reviews', views.view_sent_reviews, name="view_sent_reviews"),
+    
     path('accept_deny_request', views.accept_deny_request, name="accept_deny_request"),
     path('submit_requests', views.submit_requests, name="submit_requests"),
     path('submit_draft_post', views.submit_draft_post, name="submit_draft_post"),

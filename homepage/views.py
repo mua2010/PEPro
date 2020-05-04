@@ -76,6 +76,15 @@ def display_manager_reviews(request):
     return render(request, "homepage/display_manager_reviews.html", context)
 
 
+def view_sent_reviews(request):
+    user = Employee.objects.get(id=13)
+    reviews = Review.objects.filter(reviewer=user, status='S')
+
+    context = {
+        "user": user,
+        "reviews": reviews,
+    }
+    return render(request, "homepage/view_sent_reviews.html", context)
 
 
 def display_requests(request):
