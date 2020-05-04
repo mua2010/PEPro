@@ -30,13 +30,16 @@ def account_info(request):
     reviewee_count = Review.objects.filter(reviewee=user, status=Review.SENT).count()
     request_count = Request.objects.filter(requestee=user, status=Request.PENDING).count()
     requestee_count = Request.objects.filter(requestor=user).count()
+    underlings = list(Employee.objects.filter(manager_id=user.id))
+    isManager = (len(underlings) != 0)
     context = {
         "manager":manager,
         "user": user,
         "review_count":review_count,
         "reviewee_count":reviewee_count,
         "request_count":request_count,
-        "requestee_count":requestee_count
+        "requestee_count":requestee_count,
+        "isManager":isManager,
     }
     return render(request, "homepage/account_info.html", context)
 
@@ -76,6 +79,17 @@ def display_manager_reviews(request):
     return render(request, "homepage/display_manager_reviews.html", context)
 
 
+def view_sent_reviews(request):
+    user = Employee.objects.get(id=13)
+    reviews = Review.objects.filter(reviewer=user, status='S')
+    underlings = list(Employee.objects.filter(manager_id=user.id))
+    isManager = (len(underlings) != 0)
+    context = {
+        "user": user,
+        "reviews": reviews,
+        "isManager":isManager,
+    }
+    return render(request, "homepage/view_sent_reviews.html", context)
 
 
 def display_requests(request):
@@ -103,10 +117,8 @@ def accept_deny_request(request):
         curr_request.status = status
         curr_request.save()
         
-        requestor_id = get_object_or_404(
-            Employee, id=curr_request.requestor_id)
-        requestee_id = get_object_or_404(
-            Employee, id=curr_request.requestee_id)
+        requestor_id = Employee.objects.get(id=curr_request.requestor_id)
+        requestee_id = Employee.objects.get(id=curr_request.requestee_id)
 
     response_data = {
         "feedback": None,
@@ -154,9 +166,12 @@ def request_review(request):
     '''
     # employess = Employee.objects.order_by("first_name").exclude(id=100)
     # breakpoint()
+    underlings = list(Employee.objects.filter(manager_id=user.id))
+    isManager = (len(underlings) != 0)
     context = {
         "user": user,
-        "employees": employees
+        "employees": employees,
+        "isManager":isManager,
     }
     return render(request, "homepage/request_review.html", context)
 
