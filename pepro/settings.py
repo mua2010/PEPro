@@ -155,6 +155,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 Uncomment
 FOR SSL-DB-Deployment purpose
 '''
+
 # if os.getcwd() == '/app':
 #     import dj_database_url
 #     db_from_env = dj_database_url.config(conn_max_age=500)
