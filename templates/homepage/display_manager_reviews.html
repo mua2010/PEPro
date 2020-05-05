@@ -12,13 +12,12 @@
         }
     </script>
     {% for underling in underlings %}
-    <div class="card border-dark mb-3" data-toggle="collapse" href="#{{underling.id}}" style="max-width: 50rem;">
-        <div class="card-body">
-            <h5 class="card-title">Name: {{underling}} (
-                <script type="text/javascript">
-                    document.write(nReviews("{{numRevs}}", "{{underling.id}}"))
-                </script> reviews)</h5>
-            <h7 class="card-subtitle">Position: {{ user.position_title }}</h7>
+    <div class="card border-dark mb-2" data-toggle="collapse" href="#{{underling.id}}" style="max-width: 50rem; cursor:pointer">
+      <div class="card-body py-1">
+        <h5 class="card-title m-0">Name: {{underling}} - {{ user.position_title }} (
+          <script type="text/javascript">
+           document.write(nReviews("{{numRevs}}", "{{underling.id}}"))
+          </script> reviews)</h5>
             <div class="collapse" id="{{underling.id}}">
                 <br> {% for review in reviews %} {% if review.reviewee.id == underling.id %}
                 <div class="form-check" id="review{{review.id}}">
