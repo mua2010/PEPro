@@ -13,11 +13,11 @@
     </script>
     {% for underling in underlings %}
     <div class="card border-dark mb-2" data-toggle="collapse" href="#{{underling.id}}" style="max-width: 50rem; cursor:pointer">
-      <div class="card-body py-1">
-        <h5 class="card-title m-0">Name: {{underling}} - {{ user.position_title }} (
-          <script type="text/javascript">
-           document.write(nReviews("{{numRevs}}", "{{underling.id}}"))
-          </script> reviews)</h5>
+        <div class="card-body py-1">
+            <h5 class="card-title m-0">{{underling}} - <small>{{ user.position_title }} (
+                <script type="text/javascript">
+                    document.write(nReviews("{{numRevs}}", "{{underling.id}}"))
+                </script> reviews)</small></h5>
             <div class="collapse" id="{{underling.id}}">
                 <br> {% for review in reviews %} {% if review.reviewee.id == underling.id %}
                 <div class="form-check" id="review{{review.id}}">
@@ -37,13 +37,7 @@
     </div>
     {% endfor %}
 </div>
-<br>
-<br>
 
-
-
-<br>
-<br>
 <!-- <div class="list-group">
      <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
      <div class="d-flex w-100 justify-content-between">
