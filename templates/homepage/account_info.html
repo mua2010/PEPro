@@ -8,7 +8,7 @@
         <div class="card-header">
             <font style="color:black">Welcome, {{user.first_name}}</font>
             <br>
-            <small class="card-subtitle">Position: {{ user.position_title }}</small>
+            <small class="card-subtitle">{{ user.position_title }}</small>
             <br>
             <small class="card-subtitle">Start Date: {{ user.start_date }}</small>
         </div>
@@ -21,7 +21,7 @@
             <br>Reviews requested: {{requestee_count}}
         </div>
     </div>
-    <hr>
+    <br>
     <div class="card border-dark mb-3 shadow" style="max-width: 50rem;">
         <div class="card-header">
             <font style="color:black">Manager: {{manager}}</font>
@@ -31,10 +31,7 @@
             <font style="color:blue">{{manager.email}}</font>
         </div>
     </div>
-    <hr><br><br>
-    <p>
-        <img src="../static/homepage/CV.png" alt="Carbon Valley Unofficial Logo" class="right">
-    </p>
+    <br><br>
 </div>
 <!-- end Page Content -->
 {% endblock %}

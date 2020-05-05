@@ -29,7 +29,7 @@
     <!-- plugin code -->
     <script src="{% static 'homepage/bootstrap-duallistbox-master/dist/jquery.bootstrap-duallistbox.min.js' %}"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'homepage/bootstrap-duallistbox-master/src/bootstrap-duallistbox.css' %}">
-</head>
+</head> 
 
 <body id="page-top">
 
@@ -138,24 +138,25 @@
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3"><i class="fa fa-bars"></i></button>
 
                     <!-- Topbar Navbar -->
-                    <a class="navbar-nav mr-auto"><b>{{user.company}}</b></a>
+                    <a class="navbar-nav mr-auto"><b>{{user.company}} - Peer Evaluation Pro</b></a>
                     <a class="navbar-nav ml-auto"><b>{{user}}</b></a>
                 </nav>
                 <!-- End of Topbar -->
 
                 <!-- Page Content -->
                 {% block content %}
-                <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
+                <div class="position-relative overflow-hidden p-3 p-md-3 m-md-3 text-center bg-light">
                     <div class="col-md-5 mx-auto my-5 p-lg-5" style="color:#319e2d">
                         <h1 class="display-4 font-weight-normal">PEPro</h1>
-                        <p class="font-weight-normal lead text-black-50">Peer Evaluation Tool</p>
-                        <button type="button" class="btn btn-light"></button>
-                        <button type="button" class="btn btn-light">
-                            <p><br></p>
-                        </button>
+                        <p class="font-weight-normal lead text-black-50">Peer Evaluation Pro</p>
+                        <div class="card border-dark mb-3 shadow p-3" style="max-width: 50rem;">
+                          PEPro is a peer evaluation tool that allows employees to review each other, enabling the client to gage their employees’ performance and allowing employees to reflect on themselves through the words of their peers.
+                        </div>
                     </div>
-                    <div class="box-shadow d-md-block d-none product-device product-device-2"></div>
-                </div>
+                <p>
+                  <img src="../static/homepage/CV.png" alt="Carbon Valley Unofficial Logo" width="20%" height="20%" class="float-right">
+                </p>
+
                 {% endblock %}
                 <!-- End Page Content -->
 
