@@ -151,7 +151,7 @@ def submit_draft_post(request):
 
 @csrf_exempt
 def request_review(request):
-    u_id=13
+    u_id=12
     user = Employee.objects.get(id=u_id)
     '''
     following is a way to only show options with no reveiw requests
