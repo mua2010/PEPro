@@ -11,7 +11,11 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+
 from dotenv import load_dotenv, find_dotenv
+ENV_FILE = find_dotenv()
+if ENV_FILE:
+    load_dotenv(ENV_FILE)
 
 from django.core.exceptions import ImproperlyConfigured
 
@@ -30,19 +34,20 @@ def get_env_value(env_variable, which_env_var):
         error_msg = 'Set the environment %s variable' %which_env_var
         raise ImproperlyConfigured(error_msg)
 
-SECRET_KEY = get_env_value('PEPro_SECRET_KEY', 'SECRET_KEY')
+
+SECRET_KEY = os.environ.get('PEPro_SECRET_KEY')
+# SECRET_KEY = get_env_value('PEPro_SECRET_KEY', 'SECRET_KEY')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True if os.getenv("DEBUG") in ("TRUE", "True", "1") else False
-DEBUG = True
+DEBUG = True if os.environ.get("DEBUG") in ("TRUE", "True", "1") else False
 
 # ALLOWED_HOSTS = [
 #         "127.0.0.1",
 #         "localhost",
 #         "pepro-320.herokuapp.com",
 # ]
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -94,14 +99,25 @@ WSGI_APPLICATION = 'pepro.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': get_env_value('PEPro_DB_NAME', 'NAME'),
+#         'USER': get_env_value('PEPro_DB_USER', 'USER'),
+#         'PASSWORD': get_env_value('PEPro_DB_PASSWORD', 'PASSWORD'),
+#         'HOST': get_env_value('PEPro_DB_HOST', 'HOST'),
+#         'PORT': get_env_value('PEPro_DB_PORT', 'PORT'),
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': get_env_value('PEPro_DB_NAME', 'NAME'),
-        'USER': get_env_value('PEPro_DB_USER', 'USER'),
-        'PASSWORD': get_env_value('PEPro_DB_PASSWORD', 'PASSWORD'),
-        'HOST': get_env_value('PEPro_DB_HOST', 'HOST'),
-        'PORT': get_env_value('PEPro_DB_PORT', 'PORT'),
+        'NAME': os.environ.get('PEPro_DB_NAME', 'NAME'),
+        'USER': os.environ.get('PEPro_DB_USER', 'USER'),
+        'PASSWORD': os.environ.get('PEPro_DB_PASSWORD', 'PASSWORD'),
+        'HOST': os.environ.get('PEPro_DB_HOST', 'HOST'),
+        'PORT': os.environ.get('PEPro_DB_PORT', 'PORT'),
     }
 }
 
