@@ -78,10 +78,12 @@ celerybeat-schedule.*
 *.sage.py 
 
 # Environments 
+.pepro_env
 .env 
 .venv 
 .venv-deploy
 env/ 
+pepro_env/
 venv/ 
 ENV/ 
 env.bak/ 
