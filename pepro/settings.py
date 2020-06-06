@@ -27,12 +27,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
-def get_env_value(env_variable, which_env_var):
-    try:
-      	return os.environ[env_variable]
-    except KeyError:
-        error_msg = 'Set the environment %s variable' %which_env_var
-        raise ImproperlyConfigured(error_msg)
+# def get_env_value(env_variable, which_env_var):
+#     try:
+#       	return os.environ[env_variable]
+#     except KeyError:
+#         error_msg = 'Set the environment %s variable' %which_env_var
+#         raise ImproperlyConfigured(error_msg)
 
 
 SECRET_KEY = os.environ.get('PEPro_SECRET_KEY')
