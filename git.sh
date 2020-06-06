@@ -12,5 +12,5 @@ do
     git commit -m "new changes"
     git push
     echo "DONE!"
-    sleep 30
+    # sleep 30
 done
