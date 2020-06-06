@@ -2,10 +2,12 @@ import json
 import os
 from homepage.models import Employee, Company
 
+
 def insert_employees(json_file_name):
     '''
     Loads the JSON in json_file_name and inserts all the employees and companies into the database tables
     '''
+    
     with open(json_file_name, "r") as employees_json_file:
         employees_json = json.load(employees_json_file)
 
