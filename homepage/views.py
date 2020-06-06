@@ -165,7 +165,6 @@ def request_review(request):
     show all emps except current user (and give feedback)
     '''
     # employess = Employee.objects.order_by("first_name").exclude(id=100)
-    # breakpoint()
     underlings = list(Employee.objects.filter(manager_id=user.id))
     isManager = (len(underlings) != 0)
     context = {
@@ -217,30 +216,6 @@ def submit_requests(request):
     response_data["private_status"] = 200
     return HttpResponse(json.dumps(response_data))
 
-# @csrf_exempt
-# def request_review_post(request):
-#     reviewee_email = request.POST["reviewee_email"]
-#     reviewer_email = request.POST["reviewer_email"]
-
-#     if not Employee.objects.filter(email=reviewer_email).exists():
-#         return HttpResponse("Co-worker's email does not match any emails on record!")
-
-#     reviewee = Employee.objects.get(email=reviewee_email)
-#     reviewer = Employee.objects.get(email=reviewer_email)
-#     if Request.objects.filter(requestor=reviewee, requestee=reviewer).exists():
-#         return HttpResponse("There is already a pending review request to this person!")
-
-#     if reviewee_email == reviewer_email:
-#         return HttpResponse("You cannot review yourself!")
-
-#     reviewee = Employee.objects.get(email=reviewee_email)
-#     reviewer = Employee.objects.get(email=reviewer_email)
-
-#     Request.objects.create(requestee=reviewer, requestor=reviewee)
-
-#     return HttpResponse("Request sent.", status=200)
-
-
 # # ===========================================================
 # # Not sure if this should be a view but it was how I figured out how to run a script
 
@@ -257,4 +232,3 @@ def insert_employees(request):
 #     from insert_employees import insert_employees
 #     insert_employees(json_file_name="employees.json")
 #     return HttpResponse("Inserted employees")
-# >>>>>>> cad4e2d4e0b80d50ecdca68b5b0d2b6be2862c5f
